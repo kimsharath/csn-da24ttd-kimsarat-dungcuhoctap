@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị StudyStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+    <div class="admin-layout">
+
+        <!-- MENU BEN TRAI -->
+        <aside class="sidebar">
+            <a href="index.html" class="admin-logo">
+                📚 StudyStore
+                <small>Trang quản trị</small>
+            </a>
+
+            <p class="menu-title">MENU CHÍNH</p>
+
+            <nav class="sidebar-menu">
+                <a class="selected" href="admin.html">▦ Dashboard</a>
+                <a href="#quanlysanpham">▣ Quản lý sản phẩm</a>
+                <a href="#quanlydanhmuc">☷ Quản lý danh mục</a>
+                <a href="#donhang">🛒 Quản lý đơn hàng</a>
+                <a href="#khachhang">♙ Khách hàng</a>
+                <a href="index.html">↩ Về trang chủ</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <p>StudyStore Admin</p>
+                <small>Hệ thống quản lý cửa hàng</small>
+            </div>
+        </aside>
+
+        <!-- NOI DUNG CHINH -->
+        <main class="admin-main">
+
+            <header class="admin-header">
+                <div>
+                    <span class="muted">StudyStore /</span>
+                    <strong>Dashboard</strong>
+                </div>
+
+                <div class="admin-profile">
+                    <span class="avatar">A</span>
+                    <div>
+                        <strong>Xin chào, Admin</strong>
+                        <small>Quản trị viên</small>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-content">
+
+                <div class="dashboard-title">
+                    <div>
+                        <h1>Tổng quan hệ thống</h1>
+                        <p>Chào mừng bạn đến trang quản trị StudyStore.</p>
+                    </div>
+                    <span class="date">Ngày cập nhật: 01/11/2026</span>
+                </div>
+
+                <!-- CAC THE THONG KE -->
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-heading">
+                            <span>Tổng sản phẩm</span>
+                            <span class="stat-icon icon-blue">▣</span>
+                        </div>
+                        <h2>120</h2>
+                        <p>Sản phẩm đang quản lý</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-heading">
+                            <span>Tổng đơn hàng</span>
+                            <span class="stat-icon icon-green">🛒</span>
+                        </div>
+                        <h2>85</h2>
+                        <p>Đơn hàng đã ghi nhận</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-heading">
+                            <span>Doanh thu</span>
+                            <span class="stat-icon icon-yellow">₫</span>
+                        </div>
+                        <h2>12.500.000đ</h2>
+                        <p>Doanh thu minh họa</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-heading">
+                            <span>Khách hàng</span>
+                            <span class="stat-icon icon-purple">♙</span>
+                        </div>
+                        <h2>320</h2>
+                        <p>Tài khoản khách hàng</p>
+                    </div>
+
+                </div>
+
+                <!-- BIEU DO DOANH THU -->
+                <div class="admin-panels">
+
+                    <section class="panel">
+                        <div class="panel-heading">
+                            <div>
+                                <h2>Doanh thu theo tháng</h2>
+                                <p>Số liệu minh họa</p>
+                            </div>
+                            <select aria-label="Chọn năm">
+                                <option>2026</option>
+                                <option>2025</option>
+                            </select>
+                        </div>
+
+                        <div class="chart">
+                            <div class="chart-labels">
+                                <span>15 triệu</span>
+                                <span>10 triệu</span>
+                                <span>5 triệu</span>
+                                <span>0</span>
+                            </div>
+
+                            <div class="chart-content">
+                                <div class="chart-lines">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+
+                                <svg viewBox="0 0 500 200"
+                                     preserveAspectRatio="none"
+                                     role="img"
+                                     aria-label="Biểu đồ doanh thu mẫu">
+                                    <polyline
+                                        points="10,160 100,125 195,100 290,115 385,60 490,25"
+                                        fill="none"
+                                        stroke="#2563eb"
+                                        stroke-width="4"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"/>
+                                    <g fill="#ffffff" stroke="#2563eb" stroke-width="4">
+                                        <circle cx="10" cy="160" r="5"/>
+                                        <circle cx="100" cy="125" r="5"/>
+                                        <circle cx="195" cy="100" r="5"/>
+                                        <circle cx="290" cy="115" r="5"/>
+                                        <circle cx="385" cy="60" r="5"/>
+                                        <circle cx="490" cy="25" r="5"/>
+                                    </g>
+                                </svg>
+
+                                <div class="chart-months">
+                                    <span>T1</span>
+                                    <span>T2</span>
+                                    <span>T3</span>
+                                    <span>T4</span>
+                                    <span>T5</span>
+                                    <span>T6</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- DON HANG GAN DAY -->
+                    <section class="panel" id="donhang">
+                        <div class="panel-heading">
+                            <div>
+                                <h2>Đơn hàng gần đây</h2>
+                                <p>Theo dõi trạng thái đơn hàng</p>
+                            </div>
+                        </div>
+
+                        <div class="table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Mã đơn</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>#DH00125</td>
+                                        <td>01/11/2026</td>
+                                        <td>125.000đ</td>
+                                        <td><span class="status pending">Đang xử lý</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#DH00124</td>
+                                        <td>31/10/2026</td>
+                                        <td>80.000đ</td>
+                                        <td><span class="status completed">Đã giao</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#DH00123</td>
+                                        <td>30/10/2026</td>
+                                        <td>45.000đ</td>
+                                        <td><span class="status pending">Đang xử lý</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#DH00122</td>
+                                        <td>29/10/2026</td>
+                                        <td>210.000đ</td>
+                                        <td><span class="status cancelled">Đã hủy</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- BANG SAN PHAM -->
+                <section class="panel product-management" id="quanlysanpham">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Sản phẩm mới cập nhật</h2>
+                            <p>Danh sách sản phẩm mẫu</p>
+                        </div>
+                        <button class="admin-button" type="button">
+                            + Thêm sản phẩm
+                        </button>
+                    </div>
+
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Danh mục</th>
+                                    <th>Giá bán</th>
+                                    <th>Tồn kho</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>📘 Vở kẻ ngang 200 trang</td>
+                                    <td>Sổ và vở</td>
+                                    <td>25.000đ</td>
+                                    <td>100</td>
+                                    <td><span class="status completed">Đang bán</span></td>
+                                </tr>
+                                <tr>
+                                    <td>🖊️ Bút bi xanh</td>
+                                    <td>Bút viết</td>
+                                    <td>5.000đ</td>
+                                    <td>200</td>
+                                    <td><span class="status completed">Đang bán</span></td>
+                                </tr>
+                                <tr>
+                                    <td>📏 Thước kẻ 20 cm</td>
+                                    <td>Dụng cụ học tập</td>
+                                    <td>8.000đ</td>
+                                    <td>150</td>
+                                    <td><span class="status completed">Đang bán</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <p class="admin-note">
+                    Đây là giao diện mẫu. Dữ liệu chưa kết nối SQL Server.
+                </p>
+
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

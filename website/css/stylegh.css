@@ -1,0 +1,113 @@
+
+        .cart-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .cart-container h2 {
+            color: #1e3a8a;
+            margin-bottom: 25px;
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .cart-table th,
+        .cart-table td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .cart-table th {
+            background: #1e3a8a;
+            color: white;
+        }
+
+        .cart-table img {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+        }
+
+        .cart-table input[type="number"] {
+            width: 65px;
+            padding: 7px;
+        }
+
+        .cart-button {
+            padding: 8px 13px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .btn-update {
+            background: #2563eb;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+        }
+
+        .cart-total {
+            text-align: right;
+            margin-top: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .cart-message {
+            padding: 12px;
+            margin-bottom: 20px;
+            background: #e0f2fe;
+            color: #075985;
+            border-radius: 5px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            background: #f1f5f9;
+        }
+
+        .continue-shopping {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        /* gioihnag */
+        
+.cart-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.btn-checkout {
+    display: inline-block;
+    background-color: #1e3a8a;
+    color: white;
+    padding: 0px 0px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-checkout:hover {
+    background-color: #2563eb;
+}
+
+    

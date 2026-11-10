@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyStore - Dụng cụ học tập</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- PHAN DAU TRANG -->
+    <header>
+        <div class="header container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">📚</span>
+                <span>
+                    <strong>StudyStore</strong>
+                    <small>Dụng cụ học tập</small>
+                </span>
+            </a>
+
+            <form class="search">
+                <input type="search" placeholder="Tìm kiếm sản phẩm...">
+                <button type="submit">⌕</button>
+            </form>
+
+            <div class="header-right">
+                <a href="#giohang">🛒 Giỏ hàng</a>
+                <a href="#lienhe">Liên hệ</a>
+            </div>
+        </div>
+
+        <!-- MENU NGANG -->
+        <nav class="navbar">
+            <div class="container">
+                <ul>
+                    <li><a class="active" href="index.html">Trang chủ</a></li>
+                    <li><a href="#danhmuc">Danh mục</a></li>
+                    <li><a href="#sanpham">Sản phẩm</a></li>
+                    <li><a href="#gioithieu">Giới thiệu</a></li>
+                    <li><a href="#lienhe">Liên hệ</a></li>
+                    <li><a href="indexqt.html">Quản trị</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- BANNER -->
+    <main>
+        <section class="banner container">
+            <div class="banner-content">
+                <span class="label">CHÀO MỪNG BẠN ĐẾN VỚI STUDYSTORE</span>
+                <h1>Dụng cụ học tập<br>Cho hành trình tri thức</h1>
+                <p>Học tốt hơn - Tiết kiệm hơn mỗi ngày.</p>
+                <a href="#sanpham" class="btn">Mua sắm ngay →</a>
+            </div>
+
+            <div class="banner-image">
+                <div class="circle"></div>
+                <span class="school-icon">🎒</span>
+                <span class="pencil-icon">✏️ 🖊️ 📏</span>
+                <span class="book-icon">📒</span>
+            </div>
+        </section>
+
+        <!-- DANH MUC -->
+        <section class="container section" id="danhmuc">
+            <div class="section-title">
+                <div>
+                    <p class="label">KHÁM PHÁ CỬA HÀNG</p>
+                    <h2>Danh mục sản phẩm</h2>
+                </div>
+            </div>
+
+            <div class="category-grid">
+                <a href="#sanpham" class="category">
+                    <span>✏️</span>
+                    <h3>Bút viết</h3>
+                    <p>Bút bi, bút chì, bút màu</p>
+                </a>
+
+                <a href="#sanpham" class="category">
+                    <span>📒</span>
+                    <h3>Sổ và vở</h3>
+                    <p>Vở viết, sổ ghi chép</p>
+                </a>
+
+                <a href="#sanpham" class="category">
+                    <span>📏</span>
+                    <h3>Dụng cụ học tập</h3>
+                    <p>Thước, compa, kéo</p>
+                </a>
+
+                <a href="#sanpham" class="category">
+                    <span>🎒</span>
+                    <h3>Balo và hộp bút</h3>
+                    <p>Đồ dùng học sinh</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- SAN PHAM -->
+        <section class="products-section section" id="sanpham">
+            <div class="container">
+                <div class="section-title">
+                    <div>
+                        <p class="label">SẢN PHẨM ĐƯỢC YÊU THÍCH</p>
+                        <h2>Sản phẩm nổi bật</h2>
+                    </div>
+                    <a href="#sanpham" class="view-all">Xem tất cả →</a>
+                </div>
+
+                <div class="product-grid">
+                    <article class="product-card">
+                        <div class="product-image blue-bg">
+                            <span>📘</span>
+                        </div>
+                        <div class="product-info">
+                            <p class="product-type">Sổ và vở</p>
+                            <h3>Vở kẻ ngang 200 trang</h3>
+                            <p class="price">25.000đ</p>
+                            <button type="button" class="add-cart">🛒 Thêm vào giỏ</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-image pink-bg">
+                            <span>🖊️</span>
+                        </div>
+                        <div class="product-info">
+                            <p class="product-type">Bút viết</p>
+                            <h3>Bút bi xanh</h3>
+                            <p class="price">5.000đ</p>
+                            <button type="button" class="add-cart">🛒 Thêm vào giỏ</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-image green-bg">
+                            <span>📏</span>
+                        </div>
+                        <div class="product-info">
+                            <p class="product-type">Dụng cụ học tập</p>
+                            <h3>Thước kẻ 20 cm</h3>
+                            <p class="price">8.000đ</p>
+                            <button type="button" class="add-cart">🛒 Thêm vào giỏ</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <div class="product-image yellow-bg">
+                            <span>🖍️</span>
+                        </div>
+                        <div class="product-info">
+                            <p class="product-type">Bút viết</p>
+                            <h3>Bộ bút màu 12 màu</h3>
+                            <p class="price">32.000đ</p>
+                            <button type="button" class="add-cart">🛒 Thêm vào giỏ</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- GIOI THIEU -->
+        <section class="container benefits" id="gioithieu">
+            <div>
+                <span>📦</span>
+                <div>
+                    <h3>Sản phẩm đa dạng</h3>
+                    <p>Nhiều dụng cụ học tập cần thiết.</p>
+                </div>
+            </div>
+
+            <div>
+                <span>💙</span>
+                <div>
+                    <h3>Giá cả hợp lý</h3>
+                    <p>Phù hợp với học sinh, sinh viên.</p>
+                </div>
+            </div>
+
+            <div>
+                <span>🤝</span>
+                <div>
+                    <h3>Hỗ trợ tận tình</h3>
+                    <p>Luôn sẵn sàng hỗ trợ khách hàng.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- CHAN TRANG -->
+    <footer id="lienhe">
+        <div class="container footer-grid">
+            <div>
+                <h3>📚 StudyStore</h3>
+                <p>Cửa hàng dụng cụ học tập dành cho mọi người.</p>
+            </div>
+
+            <div>
+                <h3>Thông tin liên hệ</h3>
+                <p>Điện thoại: 0123 456 789</p>
+                <p>Email: studystore@example.com</p>
+                <p>Địa chỉ: Trà Vinh, Việt Nam</p>
+            </div>
+
+            <div>
+                <h3>Hỗ trợ khách hàng</h3>
+                <p>Chính sách mua hàng</p>
+                <p>Chính sách đổi trả</p>
+                <p>Hướng dẫn mua hàng</p>
+            </div>
+        </div>
+
+        <div class="copyright">
+            © 2026 StudyStore - Đồ án cơ sở ngành
+        </div>
+    </footer>
+
+</body>
+</html>
