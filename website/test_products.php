@@ -1,4 +1,8 @@
-
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <?php
 require_once "config/database.php";
 
@@ -36,19 +40,56 @@ $sanPham = $stmtSanPham->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<header class="header">
-    <div class="container">
-        <h1>StudyStore</h1>
-        <p>Cửa hàng dụng cụ học tập</p>
-    </div>
-    <div class="logout">
-        <a href="dangsuat.php">Đăng xuất</a>
-    </div>
-    <div class="dangky">
-        <a href="dangky.php">Đăng ký</a></div>
-    <div class="dangnhap">
-        <a href="dangnhap.php">Đăng nhập</a>
 
+<header class="header">
+    <div class="container header-container">
+
+        <!-- Logo cửa hàng -->
+        <div class="header-logo">
+            <h1>StudyStore</h1>
+            <p>Cửa hàng dụng cụ học tập</p>
+        </div>
+
+        <!-- Khu vực tài khoản -->
+        <div class="header-actions">
+
+            <?php if (isset($_SESSION['MaTK'])): ?>
+
+                <!-- Avatar -->
+                <span class="user-avatar">
+                    <?= strtoupper(substr($_SESSION['TenDN'] ?? 'U', 0, 1)) ?>
+                </span>
+
+                <!-- Tên đăng nhập -->
+                <span class="user-info">
+                    Xin chào,
+                    <strong>
+                        <?= htmlspecialchars($_SESSION['TenDN'] ?? 'Người dùng') ?>
+                    </strong>
+                </span>
+
+                <!-- Nút đăng xuất -->
+                <a href="dangxuat.php" class="btn-header btn-logout">
+                    Đăng xuất
+                </a>
+
+            <?php else: ?>
+
+                <!-- Nút đăng nhập -->
+                <a href="dangnhap.php" class="btn-header btn-login">
+                    Đăng nhập
+                </a>
+
+                <!-- Nút đăng ký -->
+                <a href="dangky.php" class="btn-header btn-register">
+                    Đăng ký
+                </a>
+
+            <?php endif; ?>
+
+        </div>
+
+    </div>
 </header>
 
 <nav class="navbar">

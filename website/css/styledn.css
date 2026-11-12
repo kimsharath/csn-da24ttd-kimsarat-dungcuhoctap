@@ -98,3 +98,55 @@ body {
 .back-link a:hover {
     text-decoration: underline;
 }
+
+
+
+
+
+/* ===== MENU ĐIỀU HƯỚNG ===== */
+.menu {
+    background-color: #1e3a8a;
+    padding: 15px 0;
+    width: 100%;
+}
+
+.menu .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 35px;
+}
+
+/* Các liên kết menu */
+.menu a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 5px;
+    transition: 0.3s;
+}
+
+/* Khi di chuột */
+.menu a:hover {
+    color: #facc15;
+    border-bottom: 2px solid #facc15;
+}
+
+/* Mục đang được chọn */
+.menu a.active {
+    color: #facc15;
+    border-bottom: 2px solid #facc15;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .menu .container {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}

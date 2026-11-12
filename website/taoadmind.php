@@ -1,8 +1,8 @@
 <?php
 require_once "config/database.php";
 
-$tenDN = "admin";
-$matKhau = password_hash("123450", PASSWORD_DEFAULT);
+$tenDN = "admin_moi";
+$matKhau = password_hash("12112026", PASSWORD_DEFAULT);
 
 $sql = "
     INSERT INTO TaiKhoan (MaKH, TenDN, MatKhau, VaiTro)

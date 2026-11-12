@@ -138,7 +138,7 @@ body {
 .header {
     background: #1e3a8a;
     color: white;
-    padding: 20px 0;
+    padding: 30px 20px;
 }
 
 .header h1,
@@ -147,20 +147,58 @@ body {
 }
 
 /* Ép khung chứa rộng 100% màn hình */
-.container {
-    width: 100%;
-    max-width: 100%;
-    padding: 0 20px; /* Tạo khoảng đệm nhỏ để chữ không dính sát viền máy */
+.navbar {
+    background: #172554;
 }
 
-.menu {
+.navbar .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.navbar a {
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    padding: 17px 0;
+    position: relative;
+}
+
+.navbar a:hover {
+    color: #facc15;
+}
+
+.navbar a::after {
+    content: "";
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #facc15;
+    transition: 0.3s;
+}
+
+.navbar a:hover::after {
+    width: 100%;
+}
+
+/* .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 20px; /* Tạo khoảng đệm nhỏ để chữ không dính sát viền máy 
+}*/
+
+/* .menu {
     background: #172554;
     padding: 15px 0;
     text-align: center;
     
-}
+} */
 
-.menu a {
+/* .menu a {
     
     color: white;
     text-decoration: none;
@@ -169,7 +207,7 @@ body {
 
 .menu a:hover {
     color: #facc15;
-}
+} */ 
 
 /* Tổng thể Footer */
 .footer {
@@ -280,4 +318,148 @@ body {
 .out-of-stock {
     color: red;
     font-weight: bold;
+}
+
+/* ===== KHUNG NỘI DUNG TRANG SẢN PHẨM ===== */
+
+.product-page {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 25px 30px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+/* Tiêu đề */
+.product-page h2 {
+    color: #1e3a8a;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.product-page h3 {
+    color: #1e3a8a;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+/* Ô tìm kiếm */
+.product-page .search-form {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.product-page .search-form input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.product-page .search-form button {
+    padding: 12px 22px;
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Danh mục */
+.product-page .category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.product-page .category-list a {
+    text-decoration: none;
+    color: #333;
+    background: #eeeeee;
+    padding: 9px 16px;
+    border-radius: 5px;
+}
+
+.product-page .category-list a:hover,
+.product-page .category-list a.selected {
+    background: #1e3a8a;
+    color: white;
+}
+
+/* Danh sách sản phẩm */
+.product-page .product-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* Thẻ sản phẩm */
+.product-page .product-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    background: white;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.product-page .product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+}
+
+.product-page .product-info {
+    padding: 10px 5px;
+}
+
+.product-page .product-info h4 {
+    margin: 8px 0;
+    color: #222;
+}
+
+.product-page .product-price {
+    color: #e53935;
+    font-weight: bold;
+}
+
+/* Nút thêm giỏ hàng */
+.product-page .btn-cart {
+    width: 100%;
+    padding: 10px;
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.product-page .btn-cart:hover {
+    background: #162d68;
+}
+
+/* Màn hình nhỏ */
+@media (max-width: 900px) {
+    .product-page .product-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 550px) {
+    .product-page {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .product-page .product-list {
+        grid-template-columns: 1fr;
+    }
+
+    .product-page .search-form {
+        flex-direction: column;
+    }
 }

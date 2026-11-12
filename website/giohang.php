@@ -5,7 +5,7 @@ require_once "config/database.php";
 
 // Chỉ khách hàng đã đăng nhập mới được sử dụng giỏ hàng
 if (!isset($_SESSION['MaKH'])) {
-    header("Location: dangnhaps.php");
+    header("Location: dangnhap.php");
     exit;
 }
 

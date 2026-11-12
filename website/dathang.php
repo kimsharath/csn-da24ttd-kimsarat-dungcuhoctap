@@ -252,7 +252,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="container">
         <a href="test_products.php">Trang chủ</a>
         <a href="sanpham.php">Sản phẩm</a>
-        <a href="giohang.php">Giỏ hàng</a>
+        <a href="giohang.php" class="active">Giỏ hàng</a>
     </div>
 </nav>
 

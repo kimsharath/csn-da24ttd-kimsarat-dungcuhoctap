@@ -1,5 +1,7 @@
 
-/* Thiết lập chung */
+/* ==============================
+   1. THIẾT LẬP CHUNG
+================================ */
 * {
     margin: 0;
     padding: 0;
@@ -11,12 +13,6 @@ body {
     background: #f5f7fb;
     color: #333;
 }
-.lotout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: #f5fbf6;
-}
 
 .container {
     width: 90%;
@@ -24,19 +20,106 @@ body {
     margin: auto;
 }
 
-/* Header */
+/* ==============================
+   2. HEADER
+================================ */
 .header {
     background: #1e3a8a;
     color: white;
-    padding: 25px 0;
+    padding: 20px 0;
 }
 
-.header h1 {
-    font-size: 32px;
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-logo h1 {
+    font-size: 28px;
     margin-bottom: 5px;
 }
 
-/* Menu ngang */
+.header-logo p {
+    font-size: 14px;
+}
+
+/* Khu vực tài khoản */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Avatar */
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: white;
+    color: #1e3a8a;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid white;
+    flex-shrink: 0;
+}
+
+/* Tên đăng nhập */
+.user-info {
+    color: white;
+    font-size: 15px;
+}
+
+.user-info strong {
+    color: #facc15;
+}
+
+/* Các nút tài khoản */
+.btn-header {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 110px;
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+/* Đăng nhập và đăng ký */
+.btn-login,
+.btn-register {
+    background: white;
+    color: #1e3a8a;
+    border: 2px solid white;
+}
+
+/* Đăng xuất */
+.btn-logout {
+    background: #dc2626;
+    color: white;
+    border: 2px solid #dc2626;
+}
+
+/* Hiệu ứng nút */
+.btn-header:hover {
+    background: #facc15;
+    color: #1e3a8a;
+    border-color: #facc15;
+    transform: translateY(-2px);
+}
+
+/* ==============================
+   3. MENU NGANG
+================================ */
 .navbar {
     background: #172554;
 }
@@ -46,10 +129,10 @@ body {
     justify-content: center;
     align-items: center;
     gap: 30px;
+    flex-wrap: wrap;
 }
 
 .navbar a {
-    text-align: center;
     color: white;
     text-decoration: none;
     padding: 17px 0;
@@ -75,7 +158,9 @@ body {
     width: 100%;
 }
 
-/* Tiêu đề */
+/* ==============================
+   4. DANH MỤC SẢN PHẨM
+================================ */
 .category-section,
 .product-section {
     margin: 35px 0;
@@ -88,7 +173,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Danh mục */
 .category-list {
     display: flex;
     flex-wrap: wrap;
@@ -109,14 +193,15 @@ body {
     color: white;
 }
 
-/* Danh sách sản phẩm */
+/* ==============================
+   5. DANH SÁCH SẢN PHẨM
+================================ */
 .product-list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 22px;
 }
 
-/* Thẻ sản phẩm */
 .product-card {
     background: white;
     border-radius: 10px;
@@ -182,40 +267,41 @@ body {
 }
 
 /* Nút xem sản phẩm */
-.btn-buy {
-    width: 100%;
-    padding: 11px;
+.btn-product {
+    display: inline-block;
+    padding: 10px 22px;
     background: #1e3a8a;
     color: white;
-    border: none;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid #1e3a8a;
     border-radius: 6px;
-    cursor: pointer;
+    text-align: center;
+    transition: 0.3s;
 }
 
-.btn-buy:hover {
-    background: #2563eb;
+.btn-product:hover {
+    background: white;
+    color: #1e3a8a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(30,58,138,0.2);
 }
 
-/* Footer */
-    .navbar .container {
-        gap: 15px;
-        flex-wrap: wrap;
-    }
-
-/* titititi */
-/* Styling cho Footer */
+/* ==============================
+   6. FOOTER
+================================ */
 .footer {
-    background-color: #172554; /* Màu nền xanh đậm */
-    color: #ffffff;
-    padding-top: 40px;
-    padding-bottom: 20px;
+    background: #172554;
+    color: white;
+    padding: 40px 0 20px;
     margin-top: 40px;
     width: 100%;
 }
 
 .footer-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: auto;
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
@@ -228,19 +314,18 @@ body {
     min-width: 250px;
 }
 
+.footer-col h3,
+.footer-col h4 {
+    color: white;
+    margin-bottom: 15px;
+}
+
 .footer-col h3 {
     font-size: 20px;
-    margin-bottom: 15px;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .footer-col h4 {
     font-size: 18px;
-    margin-bottom: 15px;
-    color: #ffffff;
 }
 
 .footer-col p {
@@ -252,8 +337,6 @@ body {
 
 .footer-col ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
 }
 
 .footer-col ul li {
@@ -264,16 +347,14 @@ body {
     color: #cbd5e1;
     text-decoration: none;
     font-size: 14px;
-    transition: color 0.2s ease;
 }
 
 .footer-col ul li a:hover {
-    color: #facc15; /* Đổi màu vàng khi hover */
+    color: #facc15;
 }
 
-/* Dòng chữ bản quyền ở đáy */
 .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255,255,255,0.1);
     margin-top: 30px;
     padding-top: 20px;
     text-align: center;
@@ -284,92 +365,102 @@ body {
     color: #94a3b8;
 }
 
-/* Responsive cho màn hình nhỏ */
-@media (max-width: 768px) {
+/* ==============================
+   7. RESPONSIVE
+================================ */
+@media (max-width: 900px) {
+    .product-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        flex-wrap: wrap;
+    }
+
+    .navbar .container {
+        gap: 15px;
+    }
+
+    .product-list {
+        grid-template-columns: 1fr;
+    }
+
     .footer-container {
         flex-direction: column;
         gap: 25px;
     }
 }
-/* ------------------- */
-/* Header */
-.header {
-    position: relative;
-    background-color: #1e3a8a;
-    color: white;
-    padding: 25px 0;
-    text-align: left;
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-/* Nút đăng xuất góc trên bên trái */
-.logout {
-    position: absolute;
-    top: 15px;
-    right: 25px;
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: white;
+    color: #1e3a8a;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid white;
+    flex-shrink: 0;
 }
 
-.logout a {
-    display: inline-block;
+.user-info {
     color: white;
-    background-color: #dc2626;
+    font-size: 15px;
+}
+
+.user-info strong {
+    color: #facc15;
+}
+
+.btn-header {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 110px;
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 7px;
     text-decoration: none;
-    padding: 9px 16px;
-    border-radius: 5px;
     font-size: 14px;
     font-weight: bold;
     transition: 0.3s;
 }
 
-.dangky a:hover {
-    background-color: #b91c1c;
-}
-.dangky {
-    position: absolute;
-    top: 15px;
-    right: 200px;
+.btn-login,
+.btn-register {
+    background: white;
+    color: #1e3a8a;
+    border: 2px solid white;
 }
 
-.dangky a {
-    display: inline-block;
+.btn-logout {
+    background: #dc2626;
     color: white;
-    background-color: #dc2626;
-    text-decoration: none;
-    padding: 9px 16px;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: bold;
-    transition: 0.3s;
+    border: 2px solid #dc2626;
 }
 
-.dangnhap a:hover {
-    background-color: #b91c1c;
-}
-
-.dangnhap {
-    position: absolute;
-    top: 50px;
-    right: 200px;
-}
-
-.dangnhap a {
-    display: inline-block;
-    color: white;
-    background-color: #dc2626;
-    text-decoration: none;
-    padding: 9px 16px;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.dangnhap::before  {
-    width: 0;
-    background: #b91c1c;
-    transition: 0.4s;
-   
-}
-.dngnhap:hover {
-    background-color: #b91c1c;
+.btn-header:hover {
+    background: #facc15;
+    color: #1e3a8a;
+    border-color: #facc15;
+    transform: translateY(-2px);
 }
 
