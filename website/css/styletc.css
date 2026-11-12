@@ -268,7 +268,10 @@ body {
 
 /* Nút xem sản phẩm */
 .btn-product {
-    display: inline-block;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+
     padding: 10px 22px;
     background: #1e3a8a;
     color: white;
