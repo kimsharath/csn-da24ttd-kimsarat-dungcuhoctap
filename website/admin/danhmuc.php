@@ -1,13 +1,29 @@
 
+
+
+
 <?php
-session_start();
-require_once "../config/database.php";
+// Kiểm tra quyền Admin
+require_once __DIR__ . "/taoadmind.php";
+
+// Đảm bảo đã nạp kết nối MySQL
+require_once __DIR__ . "/../config/database.php";
+// if (!isset($conn)) {
+//     die("Lỗi: Chưa khởi tạo kết nối MySQL!");
+// }
+
+// echo "Kết nối MySQL đã sẵn sàng!";
+// $thongBao = "";
+// $loi = "";
+
+
+
 
 // 1. Kiểm tra quyền Admin
-if (!isset($_SESSION['MaTK']) || ($_SESSION['VaiTro'] ?? '') !== 'Admin') {
-    header("Location: ../dangnhap.php");
-    exit;
-}
+// if (!isset($_SESSION['MaTK']) || ($_SESSION['VaiTro'] ?? '') !== 'Admin') {
+//     header("Location: ../dangnhap.php");
+//     exit;
+// }
 
 $thongBao = "";
 $loi = "";
@@ -30,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Kiểm tra danh mục có sản phẩm hay không
             $stmtKiemTra = $conn->prepare(
-                "SELECT COUNT(*) FROM SanPham WHERE MaDM = :madm"
+                "SELECT COUNT(*) FROM sanpham WHERE MaDM = :madm"
             );
 
             $stmtKiemTra->execute([':madm' => $maDM]);
@@ -42,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             $stmtXoa = $conn->prepare(
-                "DELETE FROM DanhMuc WHERE MaDM = :madm"
+                "DELETE FROM danhmuc, sanpham WHERE danhmuc.MaDM = :madm AND sanpham.MaDM = :madm"
             );
 
             $stmtXoa->execute([':madm' => $maDM]);
@@ -63,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($hanhDong === 'them') {
 
             $stmtTrung = $conn->prepare(
-                "SELECT COUNT(*) FROM DanhMuc WHERE TenDM = :tendm"
+                "SELECT COUNT(*) FROM danhmuc WHERE TenDM = :tendm"
             );
 
             $stmtTrung->execute([':tendm' => $tenDM]);
@@ -74,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // THÊM DANH MỤC
             $sql = "
-                INSERT INTO DanhMuc (TenDM, MoTa)
+                INSERT INTO danhmuc (TenDM, MoTa)
                 VALUES (:tendm, :mota)
             ";
 
@@ -100,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $stmtTrung = $conn->prepare("
                 SELECT COUNT(*)
-                FROM DanhMuc
+                FROM danhmuc
                 WHERE TenDM = :tendm AND MaDM <> :madm
             ");
 
@@ -114,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             $sql = "
-                UPDATE DanhMuc
+                UPDATE danhmuc
                 SET TenDM = :tendm,
                     MoTa = :mota
                 WHERE MaDM = :madm
@@ -157,7 +173,7 @@ if (isset($_GET['sua'])) {
     $maDM = (int)$_GET['sua'];
 
     $stmtSua = $conn->prepare(
-        "SELECT * FROM DanhMuc WHERE MaDM = :madm"
+        "SELECT * FROM danhmuc WHERE MaDM = :madm"
     );
 
     $stmtSua->execute([':madm' => $maDM]);
@@ -176,9 +192,9 @@ $sql = "
         DM.TenDM,
         DM.MoTa,
         (SELECT COUNT(*)
-         FROM SanPham SP
+         FROM sanpham SP
          WHERE SP.MaDM = DM.MaDM) AS SoSanPham
-    FROM DanhMuc DM
+    FROM danhmuc DM
 ";
 
 if ($tuKhoa !== '') {

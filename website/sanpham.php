@@ -1,3 +1,4 @@
+
 <?php
 require_once "config/database.php";
 
@@ -8,8 +9,14 @@ $tuKhoa = trim($_GET['q'] ?? '');
 $maDM = isset($_GET['madm']) ? (int)$_GET['madm'] : 0;
 
 // 3. Lấy danh sách danh mục
-$sqlDanhMuc = "SELECT MaDM, TenDM FROM DanhMuc ORDER BY MaDM";
+$sqlDanhMuc = "
+    SELECT MaDM, TenDM
+    FROM danhmuc
+    ORDER BY MaDM
+";
+
 $stmtDanhMuc = $conn->query($sqlDanhMuc);
+
 $danhMuc = $stmtDanhMuc->fetchAll(PDO::FETCH_ASSOC);
 
 // 4. Tạo câu truy vấn lấy sản phẩm
@@ -22,33 +29,37 @@ $sql = "
         SP.HinhAnh,
         SP.MoTa,
         DM.TenDM
-    FROM SanPham SP
-    INNER JOIN DanhMuc DM
+    FROM sanpham AS SP
+    INNER JOIN danhmuc AS DM
         ON SP.MaDM = DM.MaDM
     WHERE 1 = 1
 ";
 
 $params = [];
 
-// 5. Nếu có từ khóa thì tìm theo tên sản phẩm
+// 5. Tìm kiếm theo tên sản phẩm
 if ($tuKhoa !== '') {
     $sql .= " AND SP.TenSP LIKE :tukhoa";
     $params[':tukhoa'] = '%' . $tuKhoa . '%';
 }
 
-// 6. Nếu chọn danh mục thì lọc theo mã danh mục
+// 6. Lọc theo danh mục
 if ($maDM > 0) {
     $sql .= " AND SP.MaDM = :madm";
     $params[':madm'] = $maDM;
 }
 
+// 7. Sắp xếp sản phẩm mới nhất
 $sql .= " ORDER BY SP.MaSP DESC";
 
-// 7. Thực hiện truy vấn
+// 8. Thực hiện truy vấn
 $stmt = $conn->prepare($sql);
 $stmt->execute($params);
+
 $sanPham = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="vi">

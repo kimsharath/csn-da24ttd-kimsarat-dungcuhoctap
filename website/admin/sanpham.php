@@ -1,7 +1,8 @@
 
 <?php
-session_start();
-require_once "../config/database.php";
+require_once __DIR__ . "/taoadmind.php";
+require_once __DIR__ . "/../config/database.php";
+
 
 // 1. Kiểm tra quyền Admin
 if (!isset($_SESSION['MaTK']) || ($_SESSION['VaiTro'] ?? '') !== 'Admin') {
@@ -107,7 +108,7 @@ if ($hanhDong === 'xoa') {
                 INSERT INTO SanPham
                 (TenSP, MaDM, DonGia, SoLuongTon, HinhAnh, MoTa, NgayTao)
                 VALUES
-                (:tensp, :madm, :dongia, :soluong, :hinhanh, :mota, GETDATE())
+                (:tensp, :madm, :dongia, :soluong, :hinhanh, :mota, NOW())
             ";
 
             $stmt = $conn->prepare($sql);

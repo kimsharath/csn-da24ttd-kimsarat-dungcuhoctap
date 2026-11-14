@@ -1,7 +1,7 @@
 
 <?php
-session_start();
-require_once "../config/database.php";
+require_once "taoadmind.php";
+
 
 // 1. Kiểm tra quyền Admin
 if (

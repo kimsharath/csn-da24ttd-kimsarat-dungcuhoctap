@@ -1,9 +1,10 @@
+
 <?php
+
 require_once "config/database.php";
 
 $thongBao = "";
 $loaiThongBao = "";
-
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -22,66 +23,80 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $tenDN === '' || $matKhau === '' ||
         $xacNhanMatKhau === ''
     ) {
+
         $thongBao = "Vui lòng nhập đầy đủ các thông tin bắt buộc.";
         $loaiThongBao = "error";
 
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
         $thongBao = "Địa chỉ email không hợp lệ.";
         $loaiThongBao = "error";
 
     } elseif (strlen($matKhau) < 6) {
+
         $thongBao = "Mật khẩu phải có ít nhất 6 ký tự.";
         $loaiThongBao = "error";
 
     } elseif ($matKhau !== $xacNhanMatKhau) {
+
         $thongBao = "Mật khẩu xác nhận không khớp.";
         $loaiThongBao = "error";
 
     } else {
 
         try {
+
             // 3. Bắt đầu giao dịch
             $conn->beginTransaction();
 
             // 4. Kiểm tra email đã tồn tại
             $sqlKiemTraEmail = "
                 SELECT COUNT(*)
-                FROM KhachHang
+                FROM khachhang
                 WHERE Email = :email
             ";
 
             $stmtEmail = $conn->prepare($sqlKiemTraEmail);
-            $stmtEmail->execute([':email' => $email]);
+            $stmtEmail->execute([
+                ':email' => $email
+            ]);
 
-            // 5. Kiểm tra tên đăng nhập đã tồn tại
+            $soEmail = $stmtEmail->fetchColumn();
+
+            // 5. Kiểm tra tên đăng nhập
             $sqlKiemTraTenDN = "
                 SELECT COUNT(*)
-                FROM TaiKhoan
+                FROM taikhoan
                 WHERE TenDN = :tendn
             ";
 
             $stmtTenDN = $conn->prepare($sqlKiemTraTenDN);
-            $stmtTenDN->execute([':tendn' => $tenDN]);
+            $stmtTenDN->execute([
+                ':tendn' => $tenDN
+            ]);
 
-            if ($stmtEmail->fetchColumn() > 0) {
+            $soTenDN = $stmtTenDN->fetchColumn();
+
+            if ($soEmail > 0) {
 
                 $conn->rollBack();
+
                 $thongBao = "Email này đã được sử dụng.";
                 $loaiThongBao = "error";
 
-            } elseif ($stmtTenDN->fetchColumn() > 0) {
+            } elseif ($soTenDN > 0) {
 
                 $conn->rollBack();
+
                 $thongBao = "Tên đăng nhập đã tồn tại.";
                 $loaiThongBao = "error";
 
             } else {
 
-                // 6. Thêm khách hàng và lấy MaKH
+                // 6. Thêm khách hàng vào MySQL
                 $sqlKhachHang = "
-                    INSERT INTO KhachHang
+                    INSERT INTO khachhang
                     (HoTen, Email, SDT, DiaChi)
-                    OUTPUT INSERTED.MaKH
                     VALUES
                     (:hoten, :email, :sdt, :diachi)
                 ";
@@ -95,20 +110,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     ':diachi' => $diaChi !== '' ? $diaChi : null
                 ]);
 
-                $maKH = $stmtKH->fetchColumn();
+                // 7. Lấy mã khách hàng vừa tạo
+                $maKH = $conn->lastInsertId();
 
-                // 7. Mã hóa mật khẩu
+                // 8. Mã hóa mật khẩu
                 $matKhauMaHoa = password_hash(
                     $matKhau,
                     PASSWORD_DEFAULT
                 );
 
-                // 8. Thêm tài khoản
+                // 9. Thêm tài khoản
                 $sqlTaiKhoan = "
-                    INSERT INTO TaiKhoan
+                    INSERT INTO taikhoan
                     (MaKH, TenDN, MatKhau, VaiTro)
                     VALUES
-                    (:makh, :tendn, :matkhau, N'KhachHang')
+                    (:makh, :tendn, :matkhau, 'KhachHang')
                 ";
 
                 $stmtTK = $conn->prepare($sqlTaiKhoan);
@@ -119,11 +135,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     ':matkhau' => $matKhauMaHoa
                 ]);
 
-                // 9. Hoàn tất giao dịch
+                // 10. Hoàn tất giao dịch
                 $conn->commit();
 
                 $thongBao = "Đăng ký tài khoản thành công! Bạn có thể đăng nhập.";
                 $loaiThongBao = "success";
+
             }
 
         } catch (PDOException $e) {
@@ -132,15 +149,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $conn->rollBack();
             }
 
-            $thongBao = "Lỗi SQL: " . $e->getMessage();
+            $thongBao = "Lỗi MySQL: " . $e->getMessage();
             $loaiThongBao = "error";
+
         }
+
     }
 }
 
-    
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="vi">

@@ -1,14 +1,23 @@
+
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once "config/database.php";
 
 $thongBao = "";
 
-// Nếu đã đăng nhập thì chuyển đến trang chủ
+// Nếu đã đăng nhập thì chuyển theo quyền
 if (isset($_SESSION['MaTK'])) {
-    header("Location: test_products.php");
-    exit;
+
+    if (($_SESSION['VaiTro'] ?? '') === 'Admin') {
+        header("Location: admin/index.php");
+        exit;
+    } else {
+        header("Location: test_products.php");
+        exit;
+    }
 }
 
 // Khi người dùng nhấn nút đăng nhập
@@ -23,15 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     } else {
 
-        // Tìm tài khoản trong database
+        // Tìm tài khoản trong MySQL
         $sql = "
             SELECT MaTK, MaKH, TenDN, MatKhau, VaiTro
-            FROM TaiKhoan
+            FROM taikhoan
             WHERE TenDN = :tendn
         ";
 
         $stmt = $conn->prepare($sql);
-
         $stmt->execute([
             ':tendn' => $tenDN
         ]);
@@ -39,9 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $taiKhoan = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Kiểm tra tài khoản và mật khẩu
-        if ($taiKhoan && password_verify($matKhau, $taiKhoan['MatKhau'])) {
+        if (
+            $taiKhoan &&
+            password_verify($matKhau, $taiKhoan['MatKhau'])
+        ) {
 
-            // Tạo session mới sau khi đăng nhập
             session_regenerate_id(true);
 
             $_SESSION['MaTK'] = $taiKhoan['MaTK'];
@@ -49,23 +59,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['TenDN'] = $taiKhoan['TenDN'];
             $_SESSION['VaiTro'] = $taiKhoan['VaiTro'];
 
-            // Chuyển hướng theo quyền tài khoản
+            // Phân quyền và chuyển trang
             if ($taiKhoan['VaiTro'] === 'Admin') {
+
                 header("Location: admin/index.php");
                 exit;
-            } else {
-                header("Location: dangnhap.php");
+
+            } elseif ($taiKhoan['VaiTro'] === 'KhachHang') {
+
+                header("Location: test_products.php");
                 exit;
+
+            } else {
+
+                session_unset();
+                session_destroy();
+
+                $thongBao = "Tài khoản không có quyền truy cập hợp lệ.";
             }
 
         } else {
 
             $thongBao = "Tên đăng nhập hoặc mật khẩu không chính xác.";
-
         }
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="vi">

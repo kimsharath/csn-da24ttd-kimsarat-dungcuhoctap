@@ -1,18 +1,26 @@
 
 <?php
-session_start();
 
-require_once "../config/database.php";
+// 1. Khởi tạo Session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// 1. Kiểm tra đăng nhập và quyền Admin
-if (!isset($_SESSION['MaTK']) || ($_SESSION['VaiTro'] ?? '') !== 'Admin') {
+// 2. Kiểm tra đăng nhập và quyền Admin
+if (
+    !isset($_SESSION['MaTK']) ||
+    ($_SESSION['VaiTro'] ?? '') !== 'Admin'
+) {
     header("Location: ../dangnhap.php");
     exit;
 }
 
+// 3. Kết nối MySQL
+require_once "../config/database.php";
+
 $tenAdmin = $_SESSION['TenDN'] ?? 'Quản trị viên';
 
-// 2. Khởi tạo số liệu
+// 4. Khởi tạo số liệu
 $tongSanPham = 0;
 $tongDanhMuc = 0;
 $tongKhachHang = 0;
@@ -20,48 +28,62 @@ $tongDonHang = 0;
 $tongGiaTriDonHang = 0;
 $donHangMoi = [];
 
+$loi = "";
+
 try {
-    // 3. Thống kê dữ liệu
+
+    // 5. Thống kê tổng sản phẩm
     $tongSanPham = (int)$conn->query(
-        "SELECT COUNT(*) FROM SanPham"
+        "SELECT COUNT(*) FROM sanpham"
     )->fetchColumn();
 
+    // 6. Thống kê tổng danh mục
     $tongDanhMuc = (int)$conn->query(
-        "SELECT COUNT(*) FROM DanhMuc"
+        "SELECT COUNT(*) FROM danhmuc"
     )->fetchColumn();
 
+    // 7. Thống kê tổng khách hàng
     $tongKhachHang = (int)$conn->query(
-        "SELECT COUNT(*) FROM KhachHang"
+        "SELECT COUNT(*) FROM khachhang"
     )->fetchColumn();
 
+    // 8. Thống kê tổng đơn hàng
     $tongDonHang = (int)$conn->query(
-        "SELECT COUNT(*) FROM DonHang"
+        "SELECT COUNT(*) FROM donhang"
     )->fetchColumn();
 
+    // 9. Tính tổng giá trị đơn hàng
     $tongGiaTriDonHang = (float)$conn->query(
-        "SELECT COALESCE(SUM(TongTien), 0) FROM DonHang"
+        "SELECT COALESCE(SUM(TongTien), 0) FROM donhang"
     )->fetchColumn();
 
-    // 4. Lấy 5 đơn hàng mới nhất
+    // 10. Lấy 5 đơn hàng mới nhất
     $sql = "
-        SELECT TOP 5
+        SELECT
             DH.MaDH,
             KH.HoTen,
             DH.NgayDat,
             DH.TongTien,
             DH.TrangThai
-        FROM DonHang DH
-        INNER JOIN KhachHang KH ON DH.MaKH = KH.MaKH
+        FROM donhang AS DH
+        INNER JOIN khachhang AS KH
+            ON DH.MaKH = KH.MaKH
         ORDER BY DH.NgayDat DESC, DH.MaDH DESC
+        LIMIT 5
     ";
 
     $stmt = $conn->query($sql);
+
     $donHangMoi = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
+
     $loi = "Không thể tải dữ liệu thống kê: " . $e->getMessage();
+
 }
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -88,6 +110,7 @@ try {
             <a href="danhmuc.php">📁 Quản lý danh mục</a>
             <a href="donhang.php">🛒 Quản lý đơn hàng</a>
             <a href="khachhang.php">👥 Quản lý khách hàng</a>
+            <a href="quanlythanhtoan.php">💳 Quản lý thanh toán</a>
         </nav>
 
         <div class="sidebar-bottom">

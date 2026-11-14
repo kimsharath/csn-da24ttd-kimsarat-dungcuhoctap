@@ -18,17 +18,19 @@ $stmtGH = $conn->prepare($sqlGH);
 $stmtGH->execute([':makh' => $maKH]);
 $maGH = $stmtGH->fetchColumn();
 
-// Nếu chưa có giỏ hàng thì tạo mới
 if (!$maGH) {
     $sqlTaoGH = "
         INSERT INTO GioHang (MaKH, NgayTao)
-        OUTPUT INSERTED.MaGH
-        VALUES (:makh, GETDATE())
+        VALUES (:makh, NOW())
     ";
 
     $stmtTaoGH = $conn->prepare($sqlTaoGH);
-    $stmtTaoGH->execute([':makh' => $maKH]);
-    $maGH = $stmtTaoGH->fetchColumn();
+    $stmtTaoGH->execute([
+        ':makh' => $maKH
+    ]);
+
+    // Lấy mã giỏ hàng vừa tạo
+    $maGH = $conn->lastInsertId();
 }
 
 // 2. Xử lý các thao tác trong giỏ hàng

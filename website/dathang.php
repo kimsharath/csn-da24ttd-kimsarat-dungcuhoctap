@@ -28,10 +28,11 @@ if (!$khachHang) {
 }
 
 // 3. Lấy giỏ hàng của khách hàng
-$sqlGH = "SELECT TOP 1 MaGH
+$sqlGH = "SELECT MaGH
           FROM GioHang
           WHERE MaKH = :makh
-          ORDER BY MaGH DESC";
+          ORDER BY MaGH DESC
+          LIMIT 1";
 
 $stmtGH = $conn->prepare($sqlGH);
 $stmtGH->execute([':makh' => $maKH]);
@@ -131,20 +132,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Tạo đơn hàng
             $sqlDH = "INSERT INTO DonHang
-                      (MaKH, NgayDat, TongTien, TrangThai, DiaChiGiaoHang)
-                      OUTPUT INSERTED.MaDH
-                      VALUES
-                      (:makh, GETDATE(), :tongtien,
-                       N'Chờ xác nhận', :diachi)";
+          (MaKH, NgayDat, TongTien, TrangThai, DiaChiGiaoHang)
+          VALUES
+          (:makh, NOW(), :tongtien,
+           'Chờ xác nhận', :diachi)";
 
-            $stmtDH = $conn->prepare($sqlDH);
-            $stmtDH->execute([
-                ':makh' => $maKH,
-                ':tongtien' => $tongTien,
-                ':diachi' => $diaChi
-            ]);
+$stmtDH = $conn->prepare($sqlDH);
+$stmtDH->execute([
+    ':makh' => $maKH,
+    ':tongtien' => $tongTien,
+    ':diachi' => $diaChi
+]);
 
-            $maDH = $stmtDH->fetchColumn();
+// Lấy mã đơn hàng vừa tạo
+$maDH = $conn->lastInsertId();
 
             if (!$maDH) {
                 throw new Exception("Không tạo được đơn hàng!");
@@ -186,33 +187,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
             }
 
-            // Lưu thông tin thanh toán
-            $sqlTT = "INSERT INTO ThanhToan
-                      (MaDH, PhuongThuc, SoTien,
-                       NgayThanhToan, TrangThai)
-                      VALUES
-                      (:madh, :phuongthuc, :sotien,
-                       GETDATE(), N'Chưa thanh toán')";
+         // Lưu thông tin thanh toán (mô phỏng thanh toán thành công)
 
-            $stmtTT = $conn->prepare($sqlTT);
-            $stmtTT->execute([
-                ':madh' => $maDH,
-                ':phuongthuc' => $phuongThuc,
-                ':sotien' => $tongTien
-            ]);
+// Lưu thông tin thanh toán QR
+$sqlTT = "INSERT INTO ThanhToan
+          (MaDH, PhuongThuc, SoTien,
+           NgayThanhToan, TrangThai)
+          VALUES
+          (:madh, :phuongthuc, :sotien,
+           NULL, 'Chờ thanh toán')";
 
-            // Xóa sản phẩm khỏi giỏ hàng
-            $sqlXoa = "DELETE FROM ChiTietGioHang
-                       WHERE MaGH = :magh";
+$stmtTT = $conn->prepare($sqlTT);
 
-            $stmtXoa = $conn->prepare($sqlXoa);
-            $stmtXoa->execute([':magh' => $maGH]);
+$stmtTT->execute([
+    ':madh' => $maDH,
+    ':phuongthuc' => $phuongThuc,
+    ':sotien' => $tongTien
+]);
 
-            // Hoàn tất giao dịch
-            $conn->commit();
+// Xóa sản phẩm khỏi giỏ hàng
+$sqlXoa = "DELETE FROM ChiTietGioHang
+           WHERE MaGH = :magh";
 
-            header("Location: dathang.php?thanhcong=" . (int)$maDH);
-            exit;
+$stmtXoa = $conn->prepare($sqlXoa);
+$stmtXoa->execute([
+    ':magh' => $maGH
+]);
+
+// Hoàn tất giao dịch
+$conn->commit();
+
+// Chuyển đến trang QR
+if ($phuongThuc === 'Chuyển khoản') {
+    header("Location: thanhtoan_qr.php?madh=" . (int)$maDH);
+    exit;
+} else {
+    header("Location: dathang.php?thanhcong=" . (int)$maDH);
+    exit;
+}
+
 
         } catch (Exception $e) {
 
