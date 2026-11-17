@@ -1,6 +1,6 @@
+
 <?php
 session_start();
-
 require_once "config/database.php";
 
 // Chỉ khách hàng đã đăng nhập mới được sử dụng giỏ hàng
@@ -18,6 +18,7 @@ $stmtGH = $conn->prepare($sqlGH);
 $stmtGH->execute([':makh' => $maKH]);
 $maGH = $stmtGH->fetchColumn();
 
+// Nếu chưa có giỏ hàng thì tạo mới
 if (!$maGH) {
     $sqlTaoGH = "
         INSERT INTO GioHang (MaKH, NgayTao)
@@ -25,11 +26,8 @@ if (!$maGH) {
     ";
 
     $stmtTaoGH = $conn->prepare($sqlTaoGH);
-    $stmtTaoGH->execute([
-        ':makh' => $maKH
-    ]);
+    $stmtTaoGH->execute([':makh' => $maKH]);
 
-    // Lấy mã giỏ hàng vừa tạo
     $maGH = $conn->lastInsertId();
 }
 
@@ -44,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $maSP = (int)($_POST['MaSP'] ?? 0);
         $soLuong = max(1, (int)($_POST['SL'] ?? 1));
 
-        // Kiểm tra sản phẩm và số lượng tồn kho
+        // Kiểm tra tồn kho
         $sqlSP = "SELECT SoLuongTon FROM SanPham WHERE MaSP = :masp";
         $stmtSP = $conn->prepare($sqlSP);
         $stmtSP->execute([':masp' => $maSP]);
@@ -55,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } elseif ($tonKho < $soLuong) {
             $thongBao = "Số lượng sản phẩm trong kho không đủ.";
         } else {
+
             // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
             $sqlKiemTra = "
                 SELECT MaCTGH, SL
@@ -71,11 +70,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $chiTiet = $stmtKiemTra->fetch(PDO::FETCH_ASSOC);
 
             if ($chiTiet) {
-                $soLuongMoi = $chiTiet['SL'] + $soLuong;
+
+                $soLuongMoi = (int)$chiTiet['SL'] + $soLuong;
 
                 if ($soLuongMoi > $tonKho) {
                     $thongBao = "Số lượng vượt quá số lượng tồn kho.";
                 } else {
+
                     $sqlCapNhat = "
                         UPDATE ChiTietGioHang
                         SET SL = :sl
@@ -90,7 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                     $thongBao = "Đã cập nhật sản phẩm trong giỏ hàng.";
                 }
+
             } else {
+
                 $sqlThem = "
                     INSERT INTO ChiTietGioHang (MaGH, MaSP, SL)
                     VALUES (:magh, :masp, :sl)
@@ -117,11 +120,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($soLuong < 1) {
             $thongBao = "Số lượng phải lớn hơn 0.";
         } else {
+
             $sqlKiemTra = "
                 SELECT SP.SoLuongTon
                 FROM ChiTietGioHang CT
                 JOIN SanPham SP ON CT.MaSP = SP.MaSP
-                WHERE CT.MaCTGH = :mactgh AND CT.MaGH = :magh
+                WHERE CT.MaCTGH = :mactgh
+                AND CT.MaGH = :magh
             ";
 
             $stmtKiemTra = $conn->prepare($sqlKiemTra);
@@ -137,10 +142,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } elseif ($soLuong > $tonKho) {
                 $thongBao = "Số lượng vượt quá số lượng tồn kho.";
             } else {
+
                 $sqlCapNhat = "
                     UPDATE ChiTietGioHang
                     SET SL = :sl
-                    WHERE MaCTGH = :mactgh AND MaGH = :magh
+                    WHERE MaCTGH = :mactgh
+                    AND MaGH = :magh
                 ";
 
                 $stmtCapNhat = $conn->prepare($sqlCapNhat);
@@ -162,7 +169,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $sqlXoa = "
             DELETE FROM ChiTietGioHang
-            WHERE MaCTGH = :mactgh AND MaGH = :magh
+            WHERE MaCTGH = :mactgh
+            AND MaGH = :magh
         ";
 
         $stmtXoa = $conn->prepare($sqlXoa);
@@ -200,7 +208,7 @@ $dsGioHang = $stmtGioHang->fetchAll(PDO::FETCH_ASSOC);
 $tongTien = 0;
 
 foreach ($dsGioHang as $item) {
-    $tongTien += $item['ThanhTien'];
+    $tongTien += (float)$item['ThanhTien'];
 }
 ?>
 
@@ -211,14 +219,44 @@ foreach ($dsGioHang as $item) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giỏ hàng - StudyStore</title>
     <link rel="stylesheet" href="css/stylegh.css">
-  
 </head>
 
 <body>
 
-<div class="cart-container">
+<header class="header">
+    <div class="header-container">
+        <a href="test_products.php" class="logo">
+            StudyStore
+        </a>
 
-    <h2>Giỏ hàng của bạn</h2>
+        <div class="header-right">
+            <span class="welcome">
+                Xin chào, <?= htmlspecialchars($_SESSION['TenDN'] ?? 'Khách hàng') ?>
+            </span>
+
+            <a href="sanpham.php" class="header-link">
+                Tiếp tục mua hàng
+            </a>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="test_products.php">Trang chủ</a>
+        <a href="sanpham.php">Sản phẩm</a>
+        <a href="giohang.php" class="active">Giỏ hàng</a>
+    </div>
+</nav>
+
+<main class="main-container">
+
+    <div class="page-heading">
+        <div>
+            <h1>Giỏ hàng của bạn</h1>
+            <p>Kiểm tra sản phẩm trước khi tiến hành đặt hàng.</p>
+        </div>
+    </div>
 
     <?php if ($thongBao !== ""): ?>
         <div class="cart-message">
@@ -228,112 +266,162 @@ foreach ($dsGioHang as $item) {
 
     <?php if (count($dsGioHang) > 0): ?>
 
-        <table class="cart-table">
-            <thead>
-                <tr>
-                    <th>Hình ảnh</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Đơn giá</th>
-                    <th>Số lượng</th>
-                    <th>Thành tiền</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
+        <div class="cart-content">
 
-            <tbody>
-                <?php foreach ($dsGioHang as $item): ?>
-                    <tr>
-                        <td>
-                            <?php if (!empty($item['HinhAnh'])): ?>
-                                <img
-                                    src="<?= htmlspecialchars($item['HinhAnh']) ?>"
-                                    alt="<?= htmlspecialchars($item['TenSP']) ?>"
-                                >
-                            <?php else: ?>
-                                Chưa có ảnh
-                            <?php endif; ?>
-                        </td>
+            <div class="cart-table-wrapper">
+                <table class="cart-table">
 
-                        <td>
-                            <?= htmlspecialchars($item['TenSP']) ?>
-                        </td>
+                    <thead>
+                        <tr>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
 
-                        <td>
-                            <?= number_format($item['DonGia'], 0, ',', '.') ?> đ
-                        </td>
+                    <tbody>
+                        <?php foreach ($dsGioHang as $item): ?>
+                            <tr>
 
-                        <td>
-                            <form method="POST" action="giohang.php">
-                                <input type="hidden" name="hanhDong" value="capnhat">
-                                <input type="hidden" name="MaCTGH"
-                                       value="<?= $item['MaCTGH'] ?>">
+                                <td class="product-image">
+                                    <?php if (!empty($item['HinhAnh'])): ?>
+                                        <img
+                                            src="<?= htmlspecialchars($item['HinhAnh']) ?>"
+                                            alt="<?= htmlspecialchars($item['TenSP']) ?>"
+                                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                                        >
+                                        <span class="no-image" style="display:none;">
+                                            Chưa có ảnh
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="no-image">Chưa có ảnh</span>
+                                    <?php endif; ?>
+                                </td>
 
-                                <input type="number" name="SL"
-                                       value="<?= $item['SL'] ?>"
-                                       min="1"
-                                       max="<?= $item['SoLuongTon'] ?>">
+                                <td class="product-name">
+                                    <?= htmlspecialchars($item['TenSP']) ?>
+                                </td>
 
-                                <button type="submit"
-                                        class="cart-button btn-update">
-                                    Cập nhật
-                                </button>
-                            </form>
-                        </td>
+                                <td class="price">
+                                    <?= number_format($item['DonGia'], 0, ',', '.') ?> đ
+                                </td>
 
-                        <td>
-                            <?= number_format($item['ThanhTien'], 0, ',', '.') ?> đ
-                        </td>
+                                <td>
+                                    <form method="POST" action="giohang.php" class="quantity-form">
 
-                        <td>
-                            <form method="POST" action="giohang.php"
-                                  onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                        <input type="hidden" name="hanhDong" value="capnhat">
 
-                                <input type="hidden" name="hanhDong" value="xoa">
-                                <input type="hidden" name="MaCTGH"
-                                       value="<?= $item['MaCTGH'] ?>">
+                                        <input
+                                            type="hidden"
+                                            name="MaCTGH"
+                                            value="<?= $item['MaCTGH'] ?>"
+                                        >
 
-                                <button type="submit"
-                                        class="cart-button btn-delete">
-                                    Xóa
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                                        <input
+                                            type="number"
+                                            name="SL"
+                                            value="<?= $item['SL'] ?>"
+                                            min="1"
+                                            max="<?= $item['SoLuongTon'] ?>"
+                                            required
+                                        >
 
-       
-<div class="cart-total">
-    Tổng tiền:
-    <?= number_format($tongTien, 0, ',', '.') ?> đ
-</div>
+                                        <button type="submit" class="btn-update">
+                                            Cập nhật
+                                        </button>
 
-<div class="cart-actions">
-    <a href="sanpham.php" class="continue-shopping">
-        Tiếp tục mua hàng
-    </a>
+                                    </form>
+                                </td>
 
-    <a href="dathang.php" class="btn-checkout">
-        Tiến hành đặt hàng
-    </a>
-</div>
+                                <td class="price total-price">
+                                    <?= number_format($item['ThanhTien'], 0, ',', '.') ?> đ
+                                </td>
 
+                                <td>
+                                    <form
+                                        method="POST"
+                                        action="giohang.php"
+                                        onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');"
+                                    >
+
+                                        <input type="hidden" name="hanhDong" value="xoa">
+
+                                        <input
+                                            type="hidden"
+                                            name="MaCTGH"
+                                            value="<?= $item['MaCTGH'] ?>"
+                                        >
+
+                                        <button type="submit" class="btn-delete">
+                                            Xóa
+                                        </button>
+
+                                    </form>
+                                </td>
+
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="cart-summary">
+
+                <div class="summary-info">
+                    <span>Số sản phẩm:</span>
+                    <strong><?= count($dsGioHang) ?></strong>
+                </div>
+
+                <div class="summary-total">
+                    <span>Tổng thanh toán:</span>
+                    <strong>
+                        <?= number_format($tongTien, 0, ',', '.') ?> đ
+                    </strong>
+                </div>
+
+                <div class="cart-actions">
+
+                    <a href="sanpham.php" class="btn-continue">
+                        Tiếp tục mua hàng
+                    </a>
+
+                    <a href="dathang.php" class="btn-checkout">
+                        Tiến hành đặt hàng
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
 
     <?php else: ?>
 
         <div class="empty-cart">
-            <h3>Giỏ hàng đang trống!</h3>
+
+            <div class="empty-icon">🛒</div>
+
+            <h2>Giỏ hàng đang trống!</h2>
+
             <p>Bạn chưa thêm sản phẩm nào vào giỏ hàng.</p>
 
-            <a href="sanpham.php" class="continue-shopping">
-                Xem sản phẩm
+            <a href="sanpham.php" class="btn-continue">
+                Khám phá sản phẩm
             </a>
+
         </div>
 
     <?php endif; ?>
 
-</div>
+</main>
+
+<footer class="footer">
+    <p>© <?= date('Y') ?> StudyStore - Cửa hàng dụng cụ học tập</p>
+</footer>
 
 </body>
 </html>
