@@ -45,6 +45,9 @@ $danhMuc = [];
 $sanPham = [];
 $tongSP  = 0;
 $loi     = null;
+$tenNguoiDung = ($_SESSION['VaiTro'] ?? '') === 'KhachHang'
+    ? 'Khách hàng'
+    : ($_SESSION['TenDN'] ?? 'Người dùng');
 
 try {
     // 2. Danh mục kèm số sản phẩm
@@ -87,6 +90,20 @@ try {
     $stmt->execute($params);
     $sanPham = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    if (!empty($_SESSION['MaKH'])) {
+        $stmtTenKH = $conn->prepare("
+            SELECT HoTen
+            FROM KhachHang
+            WHERE MaKH = :makh
+        ");
+        $stmtTenKH->execute([':makh' => (int)$_SESSION['MaKH']]);
+        $hoTenKhachHang = $stmtTenKH->fetchColumn();
+
+        if (is_string($hoTenKhachHang) && trim($hoTenKhachHang) !== '') {
+            $tenNguoiDung = trim($hoTenKhachHang);
+        }
+    }
+
 } catch (PDOException $ex) {
     error_log($ex->getMessage());
     $loi = "Không thể tải dữ liệu sản phẩm. Vui lòng thử lại sau.";
@@ -103,7 +120,6 @@ foreach ($danhMuc as $dm) {
 // 4. Tài khoản, giỏ hàng
 $daDangNhap   = isset($_SESSION['MaTK']);
 $laAdmin      = $daDangNhap && ($_SESSION['VaiTro'] ?? '') === 'Admin';
-$tenNguoiDung = $_SESSION['TenDN'] ?? 'Người dùng';
 
 // Đổi 'GioHang' cho đúng tên session giỏ hàng của bạn
 $soGioHang = (isset($_SESSION['GioHang']) && is_array($_SESSION['GioHang']))
@@ -119,24 +135,16 @@ $coBoLoc = ($tuKhoa !== '' || $maDM > 0 || $conHang);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sản phẩm - StudyStore</title>
 
-    <link rel="stylesheet" href="css/styletc.css">
-    <link rel="stylesheet" href="css/stylesp.css">
+    <link rel="stylesheet" href="css/trangchu.css">
+    <link rel="stylesheet" href="css/danhsachsanpham.css">
 </head>
 <body>
-
-<!-- THANH THÔNG BÁO -->
-<div class="topbar">
-    <div class="container topbar-inner">
-        <p>Giao hàng nhanh tại Trà Vinh</p>
-        <p>Hotline: <a href="tel:0123456789">0123 456 789</a></p>
-    </div>
-</div>
 
 <!-- HEADER -->
 <header class="header">
     <div class="container header-inner">
 
-        <a href="test_products.php" class="logo" aria-label="StudyStore - Trang chủ">
+        <a href="trangchu.php" class="logo" aria-label="StudyStore - Trang chủ">
             <span class="logo-mark">S</span>
             <span class="logo-name">StudyStore</span>
         </a>
@@ -181,7 +189,7 @@ $coBoLoc = ($tuKhoa !== '' || $maDM > 0 || $conHang);
 
     <nav class="menu" aria-label="Danh mục">
         <div class="container menu-inner">
-            <a href="test_products.php">Trang chủ</a>
+            <a href="trangchu.php">Trang chủ</a>
             <a href="sanpham.php" class="active">Tất cả sản phẩm</a>
             <?php foreach (array_slice($danhMuc, 0, 5) as $dm): ?>
                 <a href="sanpham.php?madm=<?= (int)$dm['MaDM'] ?>"><?= e($dm['TenDM']) ?></a>
@@ -196,7 +204,7 @@ $coBoLoc = ($tuKhoa !== '' || $maDM > 0 || $conHang);
     <!-- TIÊU ĐỀ TRANG -->
     <div class="page-head">
         <nav class="breadcrumb" aria-label="Đường dẫn">
-            <a href="test_products.php">Trang chủ</a>
+            <a href="trangchu.php">Trang chủ</a>
             <span>/</span>
             <?php if ($tenDMChon !== ''): ?>
                 <a href="sanpham.php">Sản phẩm</a>
@@ -308,7 +316,7 @@ $coBoLoc = ($tuKhoa !== '' || $maDM > 0 || $conHang);
                         $ton  = (int)$sp['SoLuongTon'];
                         $het  = $ton <= 0;
                         $sap  = !$het && $ton <= 5;
-                        $link = 'chitietsp.php?masp=' . (int)$sp['MaSP'];
+                        $link = 'chitietsanpham.php?masp=' . (int)$sp['MaSP'];
                     ?>
                         <article class="card <?= $het ? 'is-out' : '' ?>">
                             <a href="<?= $link ?>" class="card-media">
@@ -379,7 +387,7 @@ $coBoLoc = ($tuKhoa !== '' || $maDM > 0 || $conHang);
 <footer class="footer" id="lienhe">
     <div class="container footer-grid">
         <div class="footer-brand">
-            <a href="test_products.php" class="logo logo-light">
+            <a href="trangchu.php" class="logo logo-light">
                 <span class="logo-mark">S</span>
                 <span class="logo-name">StudyStore</span>
             </a>
@@ -389,9 +397,9 @@ $coBoLoc = ($tuKhoa !== '' || $maDM > 0 || $conHang);
         <div>
             <h3>Liên hệ</h3>
             <ul>
-                <li>Điện thoại: 0123 456 789</li>
-                <li>Email: studystore@example.com</li>
-                <li>Địa chỉ: Trà Vinh, Việt Nam</li>
+                <li>Điện thoại: 0358564323</li>
+                <li>Email: kimsarat0354399075@gmail.com</li>
+                <li>Địa chỉ: Vĩnh Long, Việt Nam</li>
             </ul>
         </div>
 

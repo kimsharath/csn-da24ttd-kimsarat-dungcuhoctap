@@ -112,9 +112,9 @@ function trangThaiClass($trangThai) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Tổng quan Admin | StudyStore</title>
+    <title>Tổng quan quản trị | StudyStore</title>
 
-    <link rel="stylesheet" href="../css/indexadmin.css">
+    <link rel="stylesheet" href="../css/tongquanadmin.css">
 </head>
 
 <body>
@@ -129,7 +129,7 @@ function trangThaiClass($trangThai) {
 
             <div>
                 <h2>StudyStore</h2>
-                <p>ADMINISTRATION</p>
+                <p>QUẢN TRỊ</p>
             </div>
         </div>
 
@@ -171,7 +171,7 @@ function trangThaiClass($trangThai) {
 
         <div class="sidebar-bottom">
 
-            <a href="../test_products.php">
+            <a href="../trangchu.php">
                 <span class="menu-icon">🌐</span>
                 <span>Xem website</span>
             </a>
@@ -240,7 +240,7 @@ function trangThaiClass($trangThai) {
 
             <div class="welcome-content">
 
-                <span class="welcome-label">STUDYSTORE ADMIN</span>
+                <span class="welcome-label">QUẢN TRỊ STUDYSTORE</span>
 
                 <h2>Chào mừng trở lại, <?= e($tenAdmin) ?>!</h2>
 
@@ -258,7 +258,11 @@ function trangThaiClass($trangThai) {
             <div class="welcome-decoration">
                 <div class="decoration-circle circle-one"></div>
                 <div class="decoration-circle circle-two"></div>
-                <div class="decoration-icon">📚</div>
+                <img
+                    class="decoration-icon"
+                    src="../../images/sach.jfif"
+                    alt="Sách"
+                >
             </div>
 
         </section>

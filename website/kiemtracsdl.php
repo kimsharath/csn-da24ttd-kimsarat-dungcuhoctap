@@ -1,4 +1,5 @@
 <?php
+// Kiểm tra kết nối cơ sở dữ liệu.
 
 require_once "config/database.php";
 

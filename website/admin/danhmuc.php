@@ -224,32 +224,43 @@ $danhSachDM = $stmtDM->fetchAll(PDO::FETCH_ASSOC);
 
     <title>Quản lý danh mục - StudyStore</title>
 
-    <link rel="stylesheet" href="../css/styleadmin.css">
+    <link rel="stylesheet" href="../css/quantrichung.css">
 </head>
 
 <body>
 
 <div class="admin-container">
 
-    <!-- MENU BÊN TRÁI -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
 
         <div class="logo">
-            <h2>StudyStore</h2>
-            <p>ADMIN PANEL</p>
+            <div class="logo-icon">S</div>
+            <div>
+                <h2>StudyStore</h2>
+                <p>QUẢN TRỊ</p>
+            </div>
         </div>
 
+        <div class="menu-label">QUẢN LÝ HỆ THỐNG</div>
+
         <nav class="menu">
-            <a href="index.php">🏠 Tổng quan</a>
-            <a href="sanpham.php">📦 Quản lý sản phẩm</a>
-            <a href="danhmuc.php" class="active">📁 Quản lý danh mục</a>
-            <a href="donhang.php">🛒 Quản lý đơn hàng</a>
-            <a href="khachhang.php">👥 Quản lý khách hàng</a>
+            <a href="index.php"><span class="menu-icon">▦</span><span>Tổng quan</span></a>
+            <a href="sanpham.php"><span class="menu-icon">▣</span><span>Quản lý sản phẩm</span></a>
+            <a href="danhmuc.php" class="active"><span class="menu-icon">▤</span><span>Quản lý danh mục</span></a>
+            <a href="donhang.php"><span class="menu-icon">🛒</span><span>Quản lý đơn hàng</span></a>
+            <a href="khachhang.php"><span class="menu-icon">♙</span><span>Quản lý khách hàng</span></a>
+            <a href="quanlythanhtoan.php"><span class="menu-icon">▣</span><span>Quản lý thanh toán</span></a>
         </nav>
 
         <div class="sidebar-bottom">
-            <a href="../test_products.php">🌐 Xem website</a>
-            <a href="../dangxuat.php">🚪 Đăng xuất</a>
+            <a href="../trangchu.php"><span class="menu-icon">🌐</span><span>Xem website</span></a>
+            <a href="../dangxuat.php" class="logout-link"><span class="menu-icon">⇥</span><span>Đăng xuất</span></a>
+        </div>
+
+        <div class="sidebar-footer">
+            <p>StudyStore © 2026</p>
+            <span>Hệ thống quản lý cửa hàng</span>
         </div>
 
     </aside>
@@ -259,14 +270,20 @@ $danhSachDM = $stmtDM->fetchAll(PDO::FETCH_ASSOC);
 
         <header class="topbar">
 
-            <div>
+            <div class="page-heading">
+                <div class="breadcrumb">Trang quản trị <span>/</span> Danh mục</div>
                 <h1>Quản lý danh mục</h1>
                 <p>Thêm, sửa, xóa và tìm kiếm danh mục sản phẩm.</p>
             </div>
 
             <div class="admin-info">
-                👤 <?= htmlspecialchars($_SESSION['TenDN'] ?? 'Admin') ?>
-                <span class="admin-role">Quản trị viên</span>
+                <div class="admin-avatar">
+                    <?= htmlspecialchars(mb_strtoupper(mb_substr($_SESSION['TenDN'] ?? 'Admin', 0, 1, 'UTF-8'), 'UTF-8'), ENT_QUOTES, 'UTF-8') ?>
+                </div>
+                <div class="admin-text">
+                    <strong><?= htmlspecialchars($_SESSION['TenDN'] ?? 'Admin') ?></strong>
+                    <span>Quản trị viên</span>
+                </div>
             </div>
 
         </header>

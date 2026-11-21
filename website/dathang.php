@@ -219,7 +219,7 @@ $conn->commit();
 
 // Chuyển đến trang QR
 if ($phuongThuc === 'Chuyển khoản') {
-    header("Location: thanhtoan_qr.php?madh=" . (int)$maDH);
+    header("Location: thanhtoanqr.php?madh=" . (int)$maDH);
     exit;
 } else {
     header("Location: dathang.php?thanhcong=" . (int)$maDH);
@@ -263,7 +263,7 @@ if ($phuongThuc === 'Chuyển khoản') {
 
 <nav class="menu">
     <div class="container">
-        <a href="test_products.php">Trang chủ</a>
+        <a href="trangchu.php">Trang chủ</a>
         <a href="sanpham.php">Sản phẩm</a>
         <a href="giohang.php" class="active">Giỏ hàng</a>
     </div>

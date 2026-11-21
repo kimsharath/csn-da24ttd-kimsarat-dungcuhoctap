@@ -171,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <title>Đăng ký - StudyStore</title>
 
-    <link rel="stylesheet" href="css/styledk.css">
+    <link rel="stylesheet" href="css/dangky.css">
 </head>
 
 <body>
@@ -187,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- MENU -->
     <!-- <nav class="menu">
         <div class="container">
-            <a href="index.php">Trang chủ</a>
+            <a href="trangchu.php">Trang chủ</a>
             <a href="sanpham.php">Sản phẩm</a>
             <a href="dangnhap.php">Đăng nhập</a>
             <a href="dangky.php" class="active">Đăng ký</a>
@@ -317,7 +317,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </p>
 
             <p class="back-link">
-                <a href="test_products.php">← Quay lại trang chủ</a>
+                <a href="trangchu.php">← Quay lại trang chủ</a>
             </p>
 
         </div>

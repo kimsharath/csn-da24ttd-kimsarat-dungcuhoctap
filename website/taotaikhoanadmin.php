@@ -2,7 +2,7 @@
 <?php
 require_once "config/database.php";
 
-// Thông tin tài khoản Admin
+// Tạo tài khoản quản trị mặc định.
 $tenDN = "admin";
 $matKhau = "12345678";
 

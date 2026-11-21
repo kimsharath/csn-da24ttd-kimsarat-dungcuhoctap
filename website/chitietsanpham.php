@@ -46,7 +46,7 @@ if (!$sp) {
 
     <title>Chi tiết sản phẩm - StudyStore</title>
 
-    <link rel="stylesheet" href="css/stylect.css">
+    <link rel="stylesheet" href="css/chitietsanpham.css">
   
 </head>
 
@@ -63,7 +63,7 @@ if (!$sp) {
 <!-- MENU -->
 <nav class="menu">
     <div class="container">
-        <a href="test_products.php">Trang chủ</a>
+        <a href="trangchu.php">Trang chủ</a>
         <a href="sanpham.php">Sản phẩm</a>
         <a href="giohang.php">Giỏ hàng</a>
         <a href="dangnhap.php">Đăng nhập</a>
@@ -198,7 +198,7 @@ if (!$sp) {
             <h4>Thông tin liên hệ</h4>
             <p>Điện thoại: 0123 456 789</p>
             <p>Email: studystore@example.com</p>
-            <p>Địa chỉ: Trà Vinh, Việt Nam</p>
+            <p>Địa chỉ: Vĩnh Long, Việt Nam</p>
         </div>
 
         <div class="footer-col">

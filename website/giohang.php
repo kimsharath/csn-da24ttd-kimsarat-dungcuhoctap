@@ -218,14 +218,14 @@ foreach ($dsGioHang as $item) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giỏ hàng - StudyStore</title>
-    <link rel="stylesheet" href="css/stylegh.css">
+    <link rel="stylesheet" href="css/giohang.css">
 </head>
 
 <body>
 
 <header class="header">
     <div class="header-container">
-        <a href="test_products.php" class="logo">
+        <a href="trangchu.php" class="logo">
             StudyStore
         </a>
 
@@ -243,7 +243,7 @@ foreach ($dsGioHang as $item) {
 
 <nav class="navbar">
     <div class="nav-container">
-        <a href="test_products.php">Trang chủ</a>
+        <a href="trangchu.php">Trang chủ</a>
         <a href="sanpham.php">Sản phẩm</a>
         <a href="giohang.php" class="active">Giỏ hàng</a>
     </div>

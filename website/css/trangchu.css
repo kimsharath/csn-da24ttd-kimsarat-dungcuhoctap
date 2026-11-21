@@ -1,5 +1,5 @@
 /* =========================================================
-   StudyStore - styletc.css (v2)
+   StudyStore - trangchu.css (v2)
    Giao diện cửa hàng trực tuyến: sạch, rõ, dễ mua sắm
    ========================================================= */
 
@@ -279,14 +279,19 @@ ul { list-style: none; }
 }
 .hero-desc { max-width: 440px; margin-bottom: 28px; color: #d6dcf6; }
 .hero-buttons { display: flex; flex-wrap: wrap; gap: 12px; }
-.hero-emoji {
+.hero-photo {
     position: absolute;
     right: 40px;
     bottom: -10px;
-    font-size: 170px;
-    line-height: 1;
+    width: 210px;
+    height: 210px;
+    padding: 8px;
+    object-fit: contain;
     opacity: 0.95;
     transform: rotate(8deg);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 16px 35px rgba(8, 15, 55, 0.25);
     pointer-events: none;
 }
 
@@ -306,13 +311,16 @@ ul { list-style: none; }
 .promo:hover { transform: translateY(-3px); }
 .promo strong { font-size: 20px; font-weight: 800; }
 .promo span { max-width: 62%; font-size: 14px; }
-.promo em {
+.promo-image {
     position: absolute;
     right: 18px;
-    bottom: 8px;
-    font-size: 64px;
-    font-style: normal;
-    line-height: 1;
+    bottom: 12px;
+    width: 76px;
+    height: 76px;
+    padding: 5px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
 }
 .promo-yellow { color: var(--ink); background: var(--accent); }
 .promo-blue { color: var(--ink); background: #d9e1fb; }
@@ -393,10 +401,9 @@ ul { list-style: none; }
 .cat-icon {
     width: 60px;
     height: 60px;
-    display: grid;
-    place-items: center;
     margin-bottom: 8px;
-    font-size: 30px;
+    padding: 5px;
+    object-fit: contain;
     background: var(--ink-soft);
     border-radius: 50%;
 }
@@ -430,7 +437,7 @@ ul { list-style: none; }
     overflow: hidden;
 }
 .card-media img { width: 100%; height: 100%; object-fit: cover; }
-.card-noimg { font-size: 56px; opacity: 0.6; }
+.card-noimg { width: 100%; height: 100%; padding: 28px; object-fit: contain; }
 .card.is-out .card-media img { filter: grayscale(1); opacity: 0.6; }
 
 .tag {
@@ -532,7 +539,7 @@ ul { list-style: none; }
     .search { grid-column: 1 / -1; grid-row: 2; max-width: none; }
     .account-text, .cart-label { display: none; }
     .hero-main { padding: 36px 26px; }
-    .hero-emoji { font-size: 110px; right: 12px; opacity: 0.35; }
+    .hero-photo { width: 150px; height: 150px; right: 12px; opacity: 0.45; }
     .cta { flex-direction: column; align-items: flex-start; padding: 28px; }
 }
 

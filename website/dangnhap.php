@@ -15,7 +15,7 @@ if (isset($_SESSION['MaTK'])) {
         header("Location: admin/index.php");
         exit;
     } else {
-        header("Location: test_products.php");
+        header("Location: trangchu.php");
         exit;
     }
 }
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             } elseif ($taiKhoan['VaiTro'] === 'KhachHang') {
 
-                header("Location: test_products.php");
+                header("Location: trangchu.php");
                 exit;
 
             } else {
@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <title>Đăng nhập - StudyStore</title>
 
-    <link rel="stylesheet" href="css/styledn.css">
+    <link rel="stylesheet" href="css/dangnhap.css">
 </head>
 
 <body>
@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- MENU -->
     <!-- <nav class="menu">
         <div class="container">
-            <a href="index.php">Trang chủ</a>
+            <a href="trangchu.php">Trang chủ</a>
             <a href="sanpham.php">Sản phẩm</a>
             <a href="dangnhap.php" class="active">Đăng nhập</a>
         </div>
@@ -186,7 +186,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </p>
 
             <p class="back-link">
-                <a href="test_products.php">← Quay lại trang chủ</a>
+                <a href="trangchu.php">← Quay lại trang chủ</a>
             </p>
 
         </div>

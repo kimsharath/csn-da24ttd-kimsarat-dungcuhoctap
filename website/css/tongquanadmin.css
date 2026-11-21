@@ -1,6 +1,6 @@
 
 /* ==============================
-   STUDYSTORE ADMIN
+   TỔNG QUAN QUẢN TRỊ STUDYSTORE
 ============================== */
 
 * {
@@ -303,10 +303,11 @@ a {
 }
 
 .welcome-decoration {
-    width: 190px;
-    height: 150px;
+    width: 180px;
+    height: 160px;
     position: relative;
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
 }
@@ -328,9 +329,17 @@ a {
 }
 
 .decoration-icon {
-    font-size: 65px;
+    width: 116px;
+    height: 128px;
     position: relative;
     z-index: 2;
+    padding: 5px;
+    object-fit: contain;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    background: linear-gradient(145deg, #fff, #eff6ff);
+    box-shadow: 0 10px 24px rgba(8, 15, 55, 0.24);
+    transform: rotate(-5deg);
 }
 
 
@@ -761,11 +770,13 @@ tbody tr:hover {
     }
 
     .welcome-decoration {
-        width: 100px;
+        width: 110px;
+        height: 120px;
     }
 
     .decoration-icon {
-        font-size: 45px;
+        width: 88px;
+        height: 98px;
     }
 
 }

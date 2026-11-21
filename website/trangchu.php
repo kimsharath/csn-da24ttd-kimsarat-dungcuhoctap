@@ -10,6 +10,46 @@ function e($value) {
     return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
 }
 
+function anhTrangChu($duongDan) {
+    $duongDan = trim((string)$duongDan);
+
+    if ($duongDan === '' || preg_match('/^https?:\/\//i', $duongDan)) {
+        return $duongDan;
+    }
+
+    $duongDan = ltrim($duongDan, '/');
+    if (strpos($duongDan, 'images/') === 0) {
+        return '../' . $duongDan;
+    }
+
+    return $duongDan;
+}
+
+function anhDanhMuc($tenDanhMuc, $viTri) {
+    $anhMacDinh = ['but.jfif', 'gom.jfif', 'ho.jfif', 'sach.jfif', 'thuoc.jfif', 'balo.jfif'];
+    $tuKhoaAnh = [
+        'bút' => 'but.jfif',
+        'gôm' => 'gom.jfif',
+        'hồ dán' => 'ho.jfif',
+        'keo dán' => 'ho.jfif',
+        'keo' => 'ho.jfif',
+        'hoa' => 'ho.jfif',
+        'sách' => 'sach.jfif',
+        'thước' => 'thuoc.jfif',
+        'balo' => 'balo.jfif',
+        'ba lô' => 'balo.jfif'
+    ];
+    $tenDanhMuc = mb_strtolower((string)$tenDanhMuc, 'UTF-8');
+
+    foreach ($tuKhoaAnh as $tuKhoa => $tenAnh) {
+        if (mb_strpos($tenDanhMuc, $tuKhoa, 0, 'UTF-8') !== false) {
+            return '../images/' . $tenAnh;
+        }
+    }
+
+    return '../images/' . $anhMacDinh[$viTri % count($anhMacDinh)];
+}
+
 $danhMuc = [];
 $sanPham = [];
 $loi = null;
@@ -49,8 +89,6 @@ $soGioHang = (isset($_SESSION['GioHang']) && is_array($_SESSION['GioHang']))
     ? count($_SESSION['GioHang'])
     : 0;
 
-// Biểu tượng cho danh mục (xoay vòng)
-$iconDM = ['✏️', '📒', '🎒', '📐', '🖊️', '📚', '🖍️', '✂️'];
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -58,23 +96,15 @@ $iconDM = ['✏️', '📒', '🎒', '📐', '🖊️', '📚', '🖍️', '✂�
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudyStore - Dụng cụ học tập cho học sinh, sinh viên</title>
-    <link rel="stylesheet" href="css/styletc.css">
+    <link rel="stylesheet" href="css/trangchu.css">
 </head>
 <body>
-
-<!-- THANH THÔNG BÁO -->
-<!-- <div class="topbar">
-    <div class="container topbar-inner">
-        <p>Giao hàng nhanh tại Trà Vinh</p>
-        <p>Hotline: <a href="tel:0123456789">0123 456 789</a></p>
-    </div>
-</div> -->
 
 <!-- HEADER -->
 <header class="header">
     <div class="container header-inner">
 
-        <a href="test_products.php" class="logo" aria-label="StudyStore - Trang chủ">
+        <a href="trangchu.php" class="logo" aria-label="StudyStore - Trang chủ">
             <span class="logo-mark">S</span>
             <span class="logo-name">StudyStore</span>
         </a>
@@ -116,7 +146,7 @@ $iconDM = ['✏️', '📒', '🎒', '📐', '🖊️', '📚', '🖍️', '✂�
     <!-- MENU DANH MỤC -->
     <nav class="menu" aria-label="Danh mục">
         <div class="container menu-inner">
-            <a href="test_products.php" class="active">Trang chủ</a>
+            <a href="trangchu.php" class="active">Trang chủ</a>
             <a href="sanpham.php">Tất cả sản phẩm</a>
             <?php foreach (array_slice($danhMuc, 0, 5) as $dm): ?>
                 <a href="sanpham.php?madm=<?= (int)$dm['MaDM'] ?>"><?= e($dm['TenDM']) ?></a>
@@ -140,40 +170,20 @@ $iconDM = ['✏️', '📒', '🎒', '📐', '🖊️', '📚', '🖍️', '✂�
                 <a href="sanpham.php" class="btn btn-accent btn-lg">Mua sắm ngay</a>
                 <a href="#danhmuc" class="btn btn-ghost btn-lg">Xem danh mục</a>
             </div>
-            <span class="hero-emoji" aria-hidden="true">🎒</span>
+            <img class="hero-photo" src="../images/balo.jfif" alt="" aria-hidden="true">
         </div>
 
         <div class="hero-side">
             <a href="sanpham.php" class="promo promo-yellow">
                 <strong>Hàng mới về</strong>
                 <span>Xem sản phẩm vừa cập nhật</span>
-                <em aria-hidden="true">✏️</em>
+                <img class="promo-image" src="../images/but.jfif" alt="" aria-hidden="true">
             </a>
             <a href="sanpham.php" class="promo promo-blue">
                 <strong>Giá cho học sinh</strong>
                 <span>Tiết kiệm cho cả năm học</span>
-                <em aria-hidden="true">📒</em>
+                <img class="promo-image" src="../images/sach.jfif" alt="" aria-hidden="true">
             </a>
-        </div>
-    </section>
-
-    <!-- CAM KẾT -->
-    <section class="container perks" aria-label="Cam kết của cửa hàng">
-        <div class="perk">
-            <span class="perk-icon">🚚</span>
-            <div><strong>Giao hàng nhanh</strong><small>Nội thành Trà Vinh</small></div>
-        </div>
-        <div class="perk">
-            <span class="perk-icon">✅</span>
-            <div><strong>Hàng chính hãng</strong><small>Kiểm tra trước khi nhận</small></div>
-        </div>
-        <div class="perk">
-            <span class="perk-icon">🔄</span>
-            <div><strong>Đổi trả dễ dàng</strong><small>Khi sản phẩm lỗi</small></div>
-        </div>
-        <div class="perk">
-            <span class="perk-icon">💬</span>
-            <div><strong>Hỗ trợ tận tình</strong><small>Gọi 0123 456 789</small></div>
         </div>
     </section>
 
@@ -188,7 +198,12 @@ $iconDM = ['✏️', '📒', '🎒', '📐', '🖊️', '📚', '🖍️', '✂�
             <div class="cat-grid">
                 <?php foreach ($danhMuc as $i => $dm): ?>
                     <a href="sanpham.php?madm=<?= (int)$dm['MaDM'] ?>" class="cat-card">
-                        <span class="cat-icon"><?= $iconDM[$i % count($iconDM)] ?></span>
+                        <img
+                            class="cat-icon"
+                            src="<?= e(anhDanhMuc($dm['TenDM'], $i)) ?>"
+                            alt=""
+                            loading="lazy"
+                        >
                         <strong><?= e($dm['TenDM']) ?></strong>
                         <small><?= (int)$dm['SoSP'] ?> sản phẩm</small>
                     </a>
@@ -215,14 +230,19 @@ $iconDM = ['✏️', '📒', '🎒', '📐', '🖊️', '📚', '🖍️', '✂�
                     $ton  = (int)$sp['SoLuongTon'];
                     $het  = $ton <= 0;
                     $sap  = !$het && $ton <= 5;
-                    $link = 'chitietsp.php?masp=' . (int)$sp['MaSP'];
+                    $link = 'chitietsanpham.php?masp=' . (int)$sp['MaSP'];
                 ?>
                     <article class="card <?= $het ? 'is-out' : '' ?>">
                         <a href="<?= $link ?>" class="card-media">
                             <?php if (!empty($sp['HinhAnh'])): ?>
-                                <img src="<?= e($sp['HinhAnh']) ?>" alt="<?= e($sp['TenSP']) ?>" loading="lazy">
+                                <img src="<?= e(anhTrangChu($sp['HinhAnh'])) ?>" alt="<?= e($sp['TenSP']) ?>" loading="lazy">
                             <?php else: ?>
-                                <span class="card-noimg">📦</span>
+                                <img
+                                    class="card-noimg"
+                                    src="<?= e(anhDanhMuc($sp['TenSP'] . ' ' . $sp['TenDM'], 0)) ?>"
+                                    alt=""
+                                    loading="lazy"
+                                >
                             <?php endif; ?>
 
                             <?php if ($het): ?>
@@ -283,7 +303,7 @@ $iconDM = ['✏️', '📒', '🎒', '📐', '🖊️', '📚', '🖍️', '✂�
 <footer class="footer" id="lienhe">
     <div class="container footer-grid">
         <div class="footer-brand">
-            <a href="test_products.php" class="logo logo-light">
+            <a href="trangchu.php" class="logo logo-light">
                 <span class="logo-mark">S</span>
                 <span class="logo-name">StudyStore</span>
             </a>
@@ -293,9 +313,9 @@ $iconDM = ['✏️', '📒', '🎒', '📐', '🖊️', '📚', '🖍️', '✂�
         <div>
             <h3>Liên hệ</h3>
             <ul>
-                <li>Điện thoại: 0123 456 789</li>
-                <li>Email: studystore@example.com</li>
-                <li>Địa chỉ: Trà Vinh, Việt Nam</li>
+                <li>Điện thoại: 0358564323</li>
+                <li>Email: kimsarat0354399075@gmail.com</li>
+                <li>Địa chỉ: Vĩnh Long, Việt Nam</li>
             </ul>
         </div>
 

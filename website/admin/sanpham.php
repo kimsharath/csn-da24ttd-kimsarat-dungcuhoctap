@@ -36,10 +36,56 @@ function duongDanAnh($hinhAnh) {
         return $hinhAnh;
     }
 
-    // Chuẩn hóa đường dẫn tương đối từ thư mục website
+    // Đường dẫn trong cột HinhAnh được lưu tính từ thư mục gốc của dự án.
     $hinhAnh = preg_replace('#^(\.\./)+#', '', $hinhAnh);
 
+    if (strpos($hinhAnh, 'images/') === 0) {
+        return '../../' . $hinhAnh;
+    }
+
     return '../' . ltrim($hinhAnh, '/');
+}
+
+function taiAnhSanPham($tenFileForm) {
+    if (empty($_FILES[$tenFileForm]['name'])) {
+        return '';
+    }
+
+    if (($_FILES[$tenFileForm]['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        throw new Exception("Tải ảnh lên không thành công!");
+    }
+
+    $kichThuoc = (int)$_FILES[$tenFileForm]['size'];
+    if ($kichThuoc > 5 * 1024 * 1024) {
+        throw new Exception("Ảnh không được vượt quá 5MB!");
+    }
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($_FILES[$tenFileForm]['tmp_name']);
+    $loaiAnh = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+        'image/gif' => 'gif'
+    ];
+
+    if (!isset($loaiAnh[$mime])) {
+        throw new Exception("Chỉ được tải lên ảnh JPG, PNG, WEBP hoặc GIF!");
+    }
+
+    $thuMucAnh = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'images';
+    if (!is_dir($thuMucAnh)) {
+        mkdir($thuMucAnh, 0777, true);
+    }
+
+    $tenAnh = 'sanpham_' . date('Ymd_His') . '_' . bin2hex(random_bytes(5)) . '.' . $loaiAnh[$mime];
+    $duongDanDayDu = $thuMucAnh . DIRECTORY_SEPARATOR . $tenAnh;
+
+    if (!move_uploaded_file($_FILES[$tenFileForm]['tmp_name'], $duongDanDayDu)) {
+        throw new Exception("Không thể lưu ảnh lên máy chủ!");
+    }
+
+    return 'images/' . $tenAnh;
 }
 
 
@@ -119,6 +165,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $soLuong = (int)($_POST['SoLuongTon'] ?? 0);
             $hinhAnh = trim($_POST['HinhAnh'] ?? '');
             $moTa = trim($_POST['MoTa'] ?? '');
+
+            $anhTaiLen = taiAnhSanPham('HinhAnhUpload');
+            if ($anhTaiLen !== '') {
+                $hinhAnh = $anhTaiLen;
+            }
 
             if (
                 $tenSP === '' ||
@@ -322,6 +373,19 @@ if ($tuKhoa !== '') {
 
 $sanPham = $stmtSP->fetchAll(PDO::FETCH_ASSOC);
 
+$thuMucAnh = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'images';
+$danhSachAnh = [];
+if (is_dir($thuMucAnh)) {
+    foreach (scandir($thuMucAnh) as $tenFileAnh) {
+        $duoiFile = strtolower(pathinfo($tenFileAnh, PATHINFO_EXTENSION));
+        if (in_array($duoiFile, ['jpg', 'jpeg', 'png', 'webp', 'gif', 'jfif'], true)) {
+            $danhSachAnh[] = 'images/' . $tenFileAnh;
+        }
+    }
+}
+$hinhAnhHienTai = trim((string)($sanPhamSua['HinhAnh'] ?? ''));
+$duongDanHinhAnhHienTai = preg_replace('#^(\.\./)+#', '', $hinhAnhHienTai);
+
 ?>
 
 <!DOCTYPE html>
@@ -333,7 +397,7 @@ $sanPham = $stmtSP->fetchAll(PDO::FETCH_ASSOC);
 
     <title>Quản lý sản phẩm | StudyStore</title>
 
-    <link rel="stylesheet" href="/StudyStore/website/css/sanpham1.css">
+    <link rel="stylesheet" href="../css/quanlysanpham.css">
 </head>
 
 <body>
@@ -348,7 +412,7 @@ $sanPham = $stmtSP->fetchAll(PDO::FETCH_ASSOC);
 
             <div>
                 <h2>StudyStore</h2>
-                <p>ADMINISTRATION</p>
+                <p>QUẢN TRỊ</p>
             </div>
         </div>
 
@@ -390,7 +454,7 @@ $sanPham = $stmtSP->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="sidebar-bottom">
 
-            <a href="../test_products.php">
+            <a href="../trangchu.php">
                 <span class="menu-icon">🌐</span>
                 <span>Xem website</span>
             </a>
@@ -465,14 +529,19 @@ $sanPham = $stmtSP->fetchAll(PDO::FETCH_ASSOC);
         <section class="product-page-banner">
 
             <div>
-                <span class="product-banner-label">PRODUCT MANAGEMENT</span>
+                <span class="product-banner-label">QUẢN LÝ SẢN PHẨM</span>
                 <h2>Danh sách sản phẩm cửa hàng</h2>
                 <p>
                     Thêm mới, cập nhật và quản lý các mặt hàng StudyStore.
                 </p>
             </div>
 
-            <div class="product-banner-icon">📦</div>
+            <img
+                class="product-banner-icon"
+                src="../../images/but.jfif"
+                alt=""
+                aria-hidden="true"
+            >
 
         </section>
 
@@ -501,7 +570,7 @@ $sanPham = $stmtSP->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
 
-            <form method="POST" action="sanpham.php" class="product-form">
+            <form method="POST" action="sanpham.php" enctype="multipart/form-data" class="product-form">
 
                 <input
                     type="hidden"
@@ -598,19 +667,38 @@ $sanPham = $stmtSP->fetchAll(PDO::FETCH_ASSOC);
 
                 <div class="form-group full-width">
 
-                    <label for="HinhAnh">Đường dẫn hình ảnh</label>
+                    <label for="HinhAnh">Chọn ảnh trong thư mục images</label>
 
+                    <select id="HinhAnh" name="HinhAnh">
+                        <option value="">-- Chọn ảnh sản phẩm --</option>
+                        <?php if (
+                            $hinhAnhHienTai !== '' &&
+                            !in_array($duongDanHinhAnhHienTai, $danhSachAnh, true)
+                        ): ?>
+                            <option value="<?= e($hinhAnhHienTai) ?>" selected>
+                                Ảnh đang dùng: <?= e(basename($hinhAnhHienTai)) ?>
+                            </option>
+                        <?php endif; ?>
+                        <?php foreach ($danhSachAnh as $duongDanAnhCoSan): ?>
+                            <option
+                                value="<?= e($duongDanAnhCoSan) ?>"
+                                <?= $duongDanAnhCoSan === $duongDanHinhAnhHienTai ? 'selected' : '' ?>
+                            >
+                                <?= e(basename($duongDanAnhCoSan)) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <label for="HinhAnhUpload">Hoặc tải ảnh mới lên</label>
                     <input
-                        type="text"
-                        id="HinhAnh"
-                        name="HinhAnh"
-                        placeholder="Ví dụ: images/but-bi.jpg"
-                        value="<?= e($sanPhamSua['HinhAnh'] ?? '') ?>"
+                        type="file"
+                        id="HinhAnhUpload"
+                        name="HinhAnhUpload"
+                        accept="image/jpeg,image/png,image/webp,image/gif,.jfif"
                     >
 
                     <small>
-                        Nhập đường dẫn ảnh tính từ thư mục website, ví dụ:
-                        images/but-bi.jpg
+                        Ảnh tải lên (JPG, PNG, WEBP, GIF; tối đa 5MB) sẽ được lưu vào thư mục images.
                     </small>
 
                     <?php if (!empty($sanPhamSua['HinhAnh'])): ?>

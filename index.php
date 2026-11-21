@@ -19,8 +19,8 @@ $danhmuc = $stmtDM->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudyStore - Dụng cụ học tập</title>
-    <!-- <link rel="stylesheet" href="style1.css"> -->
-    <link rel="stylesheet" href="style1.css">
+    <!-- <link rel="stylesheet" href="giaodientrangchu.css"> -->
+    <link rel="stylesheet" href="giaodientrangchu.css">
 </head>
 <body>
 
